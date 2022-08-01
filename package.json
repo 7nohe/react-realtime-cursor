@@ -33,7 +33,7 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "react-realtime-cursor",
+  "name": "@7nohe/react-realtime-cursor",
   "author": "DAIKI URATA",
   "module": "dist/react-realtime-cursor.esm.js",
   "size-limit": [
