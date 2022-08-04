@@ -1,15 +1,18 @@
-import { useState } from 'react'
-import './App.css'
-import { Thing } from '@7nohe/react-realtime-cursor'
+import './App.css';
+import {
+  ReactRealtimeCursor,
+  initializeRRCApp,
+} from '@7nohe/react-realtime-cursor';
+import { firebaseConfig } from '../firebase.config';
+const app = initializeRRCApp({ firebaseConfig, roomId: 'myRoomId' });
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <div className="App">
-      <Thing />
+      <ReactRealtimeCursor app={app} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

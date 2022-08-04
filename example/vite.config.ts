@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@7nohe/react-realtime-cursor": path.resolve(__dirname, '../src/index.tsx'),
+      "@7nohe/react-realtime-cursor": path.resolve(__dirname, '../src/index.ts'),
     }
   }
 })
