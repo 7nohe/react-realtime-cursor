@@ -1,5 +1,5 @@
-import { FirebaseApp, FirebaseOptions, initializeApp } from 'firebase/app';
-import { Auth, getAuth, signInAnonymously } from 'firebase/auth';
+import { FirebaseApp } from 'firebase/app';
+import { Auth, getAuth, onAuthStateChanged, signInAnonymously } from 'firebase/auth';
 import {
   child,
   Database,
@@ -19,7 +19,7 @@ import { throttle } from '../utils';
 import { Cursor } from './Cursor';
 
 type ReactRealtimeCursorOptions = {
-  firebaseConfig: FirebaseOptions;
+  firebaseApp: FirebaseApp;
   roomId: string;
 };
 
@@ -33,7 +33,7 @@ type RRCApp = {
 };
 
 export const initializeRRCApp = (options: ReactRealtimeCursorOptions) => {
-  const firebase = initializeApp(options.firebaseConfig);
+  const firebase = options.firebaseApp;
   const database = getDatabase(firebase);
   const roomId = options.roomId;
   const roomRef = ref(database, 'roomId');
@@ -51,20 +51,23 @@ export const initializeRRCApp = (options: ReactRealtimeCursorOptions) => {
 
 type Props = {
   app: RRCApp;
+  autoSignIn?: boolean;
+  userName?: string;
 };
 
-export const ReactRealtimeCursor = ({ app }: Props) => {
+export const ReactRealtimeCursor = ({ app, autoSignIn = true, userName = '' }: Props) => {
   const { roomId, roomIdRef, database, roomRef, auth } = app;
   const [cursors, setCursors] = useState<
     Record<string, { id: string; x: number; y: number }>
   >({});
   const [visible, setVisible] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
-  const [currentUserId, setCurrentUserId] = useState<string>();
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   const onCursorPositionChanged = useCallback(
     ({ x, y }: { x: number; y: number }) => {
       if (!currentUserId) {
+        console.error('Unable to save cursor positions because you are not logged in')
         return;
       }
 
@@ -72,11 +75,13 @@ export const ReactRealtimeCursor = ({ app }: Props) => {
         id: currentUserId,
         x,
         y,
+        userName
       });
       set(child(roomIdRef, currentUserId), {
         id: currentUserId,
         x,
         y,
+        userName
       });
       onDisconnect(child(roomIdRef, currentUserId)).remove();
     },
@@ -130,11 +135,22 @@ export const ReactRealtimeCursor = ({ app }: Props) => {
 
   useEffect(() => {
     const init = async () => {
-      const credential = await signInAnonymously(auth);
-      setCurrentUserId(credential.user.uid);
+      // sign in anonymously if `autoSignIn` is enabled
+      if (autoSignIn) {
+        const credential = await signInAnonymously(auth);
+        setCurrentUserId(credential.user.uid);
+      }
     };
 
     init();
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUserId(user.uid);
+      } else {
+        setCurrentUserId(null);
+      }
+    })
 
     get(roomRef).then(snapshot => {
       snapshot.forEach(item => {
@@ -187,7 +203,7 @@ export const ReactRealtimeCursor = ({ app }: Props) => {
       }}
     >
       {Object.values(cursors).map(cursor => (
-        <Cursor key={cursor.id} id={cursor.id} x={cursor.x} y={cursor.y} />
+        <Cursor key={cursor.id} id={cursor.id} x={cursor.x} y={cursor.y} userName={userName} />
       ))}
       {visible && <Cursor id={currentUserId || ''} x={pos.x} y={pos.y} />}
     </div>

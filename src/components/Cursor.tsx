@@ -21,7 +21,14 @@ const getStyle = (id?: string) => {
   return CURSOR_STYLE[index];
 };
 
-export const Cursor = ({ id, x, y } = { id: '0', x: 0, y: 0 }) => {
+type Props = {
+  id: string;
+  x: number;
+  y: number;
+  userName?: string;
+}
+
+export const Cursor = ({ id, x, y, userName }: Props = { id: '0', x: 0, y: 0 }) => {
   const posX = useMotionValue(0);
   const posY = useMotionValue(0);
 
@@ -58,6 +65,7 @@ export const Cursor = ({ id, x, y } = { id: '0', x: 0, y: 0 }) => {
           fill={getStyle(id).color.default}
         />
       </svg>
+      {userName && <div style={{ position: "absolute", bottom: -25, right: -25, color: getStyle(id).color.default }}>{userName}</div>}
     </motion.div>
   );
 };

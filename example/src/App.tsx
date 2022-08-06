@@ -3,14 +3,34 @@ import {
   ReactRealtimeCursor,
   initializeRRCApp,
 } from '@7nohe/react-realtime-cursor';
-import { firebaseConfig } from '../firebase.config';
-const app = initializeRRCApp({ firebaseConfig, roomId: 'myRoomId' });
+import { firebaseApp } from '../firebase';
+import { signInAnonymously, User } from 'firebase/auth';
+import { useState } from 'react';
+
+const app = initializeRRCApp({ firebaseApp, roomId: 'myRoomId' });
+
+const auth = app.auth;
 
 function App() {
+  const [userName, setUserName] = useState('')
+  const [currentUser, setCurrentUser] = useState<User>()
+
+  if (!currentUser) {
+    return <div style={{ flex: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+      <div>Please enter your name</div>
+      <div style={{ marginBottom: '10px' }}>
+        <input type="text" onChange={input => setUserName(input.target.value)} />
+      </div>
+      <button onClick={async () => {
+        const credential = await signInAnonymously(auth)
+        setCurrentUser(credential.user)
+      }}>Start</button>
+    </div>
+  }
 
   return (
     <div className="App">
-      <ReactRealtimeCursor app={app} />
+      <ReactRealtimeCursor app={app} autoSignIn={false} userName={userName}/>
     </div>
   );
 }

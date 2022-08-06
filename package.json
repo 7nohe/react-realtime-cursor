@@ -20,7 +20,8 @@
     "analyze": "size-limit --why"
   },
   "peerDependencies": {
-    "react": ">=16"
+    "react": ">=16",
+    "firebase": ">=9.9.2"
   },
   "husky": {
     "hooks": {
@@ -57,10 +58,10 @@
     "size-limit": "^8.0.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.4.0",
+    "firebase": "^9.9.2",
     "typescript": "^4.7.4"
   },
   "dependencies": {
-    "firebase": "^9.9.1",
     "framer-motion": "^6.5.1"
   }
 }
