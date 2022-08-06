@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion, useMotionValue } from 'framer-motion';
 import { COLORS } from '../utils';
+import { CursorData } from '../types';
 
 const CURSOR_SIZE = 16;
 const CURSOR_STYLE = [
@@ -21,12 +22,7 @@ const getStyle = (id?: string) => {
   return CURSOR_STYLE[index];
 };
 
-type Props = {
-  id: string;
-  x: number;
-  y: number;
-  userName?: string;
-}
+type Props = CursorData;
 
 export const Cursor = ({ id, x, y, userName }: Props = { id: '0', x: 0, y: 0 }) => {
   const posX = useMotionValue(0);

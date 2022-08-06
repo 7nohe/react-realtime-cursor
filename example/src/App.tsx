@@ -1,13 +1,13 @@
 import './App.css';
 import {
   ReactRealtimeCursor,
-  initializeRRCApp,
+  initializeFirebaseApp,
 } from '@7nohe/react-realtime-cursor';
 import { firebaseApp } from '../firebase';
 import { signInAnonymously, User } from 'firebase/auth';
 import { useState } from 'react';
 
-const app = initializeRRCApp({ firebaseApp, roomId: 'myRoomId' });
+const app = initializeFirebaseApp({ firebaseApp, roomId: 'myRoomId' });
 
 const auth = app.auth;
 
