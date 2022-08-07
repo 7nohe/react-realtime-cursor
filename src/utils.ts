@@ -1,3 +1,5 @@
+import { CURSOR_STYLE } from "./const";
+
 type ThrottledFunction<T extends (...args: any) => any> = (
   ...args: Parameters<T>
 ) => ReturnType<T>;
@@ -21,12 +23,7 @@ export function throttle<T extends (...args: any) => any>(
   };
 }
 
-export const COLORS = {
-  red: { default: '#FF3366' },
-  yellow: { default: '#FFBB00' },
-  blue: { default: '#0088FF' },
-  green: { default: '#22DD88' },
-  orange: { default: '#FF8800' },
-  pink: { default: '#FF0099' },
-  purple: { default: '#AA44FF' },
+export const getStyle = (id?: string) => {
+  const index = (id?.charCodeAt(0) || 0) % CURSOR_STYLE.length;
+  return CURSOR_STYLE[index];
 };

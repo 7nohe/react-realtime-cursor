@@ -3,8 +3,8 @@ import { useCursors } from '../hooks/useCursors';
 import { useMouseMove } from '../hooks/useMouseMove';
 import { createFirebaseHandler } from '../libs/firebase';
 import { ReatRealtimeCursorApp } from '../types';
-import { Cursor } from './Cursor';
 import { MyCursor } from './MyCursor';
+import { OtherCursor } from './OtherCursor';
 
 type Props = {
   app: ReatRealtimeCursorApp;
@@ -17,7 +17,8 @@ export const ReactRealtimeCursor = ({ app, autoSignIn = true, userName = '' }: P
   const handler = createFirebaseHandler(app, autoSignIn)
   const { cursors, handleCursor } = useCursors()
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-  const { pos, visible, setVisible, onMouseMove } = useMouseMove(currentUserId, handler.onCursorPositionChanged, userName)
+  const [myComment, setMyComment] = useState<string>('');
+  const { pos, visible, setVisible, onMouseMove } = useMouseMove(currentUserId, handler.onCursorPositionChanged, userName, myComment)
 
   useEffect(() => {
     handler.initialize(currentUserId, (userId) => {
@@ -37,9 +38,12 @@ export const ReactRealtimeCursor = ({ app, autoSignIn = true, userName = '' }: P
       style={styles.container}
     >
       {Object.values(cursors).map(cursor => (
-        <Cursor key={cursor.id} {...cursor} />
+        <OtherCursor key={cursor.id} {...cursor} />
       ))}
-      {currentUserId && <MyCursor id={currentUserId} x={pos.x} y={pos.y} visible={visible} userName={userName} />}
+      {currentUserId && <MyCursor id={currentUserId} x={pos.x} y={pos.y} visible={visible} userName={userName} onCommentUpdated={(data) => {
+        handler.onCursorPositionChanged(data)
+        setMyComment(data.comment ?? '')
+      }} />}
     </div>
   );
 };

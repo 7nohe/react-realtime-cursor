@@ -16,6 +16,7 @@ export type CursorData = {
     x: number;
     y: number;
     userName?: string;
+    comment?: string;
 }
 
 

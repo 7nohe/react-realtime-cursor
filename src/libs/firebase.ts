@@ -85,21 +85,9 @@ export const createFirebaseHandler: (app: ReatRealtimeCursorApp, autoSignIn: boo
         },
         onCursorPositionChanged: (data: CursorData) => {
 
-            const { x, y, id, userName } = data;
-
-            set(child(roomIdRef, id), {
-                id,
-                x,
-                y,
-                userName
-            });
-            set(child(roomIdRef, id), {
-                id,
-                x,
-                y,
-                userName
-            });
+            const { id } = data;
+            set(child(roomIdRef, id), data);
             onDisconnect(child(roomIdRef, id)).remove();
-        }
+        },
     }
 }
