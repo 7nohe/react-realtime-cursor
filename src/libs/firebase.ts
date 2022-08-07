@@ -46,6 +46,8 @@ export const createFirebaseHandler: (app: ReatRealtimeCursorApp, autoSignIn: boo
                 }
             })
 
+            if (!currentUserId) return;
+
             get(roomRef).then(snapshot => {
                 snapshot.forEach(item => {
                     Object.values(item.val()).forEach((value: any) => {

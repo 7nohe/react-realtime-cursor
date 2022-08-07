@@ -4,6 +4,7 @@ import { useMouseMove } from '../hooks/useMouseMove';
 import { createFirebaseHandler } from '../libs/firebase';
 import { ReatRealtimeCursorApp } from '../types';
 import { Cursor } from './Cursor';
+import { MyCursor } from './MyCursor';
 
 type Props = {
   app: ReatRealtimeCursorApp;
@@ -26,7 +27,7 @@ export const ReactRealtimeCursor = ({ app, autoSignIn = true, userName = '' }: P
     return () => {
       handler.disconnect();
     };
-  }, []);
+  }, [currentUserId]);
 
   return (
     <div
@@ -38,7 +39,7 @@ export const ReactRealtimeCursor = ({ app, autoSignIn = true, userName = '' }: P
       {Object.values(cursors).map(cursor => (
         <Cursor key={cursor.id} {...cursor} />
       ))}
-      {visible && <Cursor id={currentUserId || ''} x={pos.x} y={pos.y} />}
+      {currentUserId && <MyCursor id={currentUserId} x={pos.x} y={pos.y} visible={visible} userName={userName} />}
     </div>
   );
 };
