@@ -1,22 +1,18 @@
-import { FirebaseApp } from "firebase/app";
-import { getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
-import { child, get, getDatabase, off, onChildAdded, onChildChanged, onChildRemoved, onDisconnect, ref, set } from "firebase/database";
+import { Auth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
+import { child, Database, get, off, onChildAdded, onChildChanged, onChildRemoved, onDisconnect, ref, set } from "firebase/database";
 import { CursorData, CursorHandler, ReatRealtimeCursorApp } from "../types";
 
 type FirebaseAppOptions = {
-    firebaseApp: FirebaseApp;
+    database: Database;
+    auth: Auth;
     roomId: string;
 };
 
 export const initializeFirebaseApp: (options: FirebaseAppOptions) => ReatRealtimeCursorApp = (options) => {
-    const firebase = options.firebaseApp;
-    const database = getDatabase(firebase);
-    const roomId = options.roomId;
+    const { database, auth, roomId } = options;
     const roomRef = ref(database, 'roomId');
     const roomIdRef = child(roomRef, roomId);
-    const auth = getAuth(firebase);
     return {
-        firebase,
         database,
         roomId,
         roomRef,

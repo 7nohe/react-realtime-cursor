@@ -4,12 +4,13 @@ import {
   initializeFirebaseApp,
 } from '@7nohe/react-realtime-cursor';
 import { firebaseApp } from '../firebase';
-import { signInAnonymously, User } from 'firebase/auth';
+import { getAuth, signInAnonymously, User } from 'firebase/auth';
+import { getDatabase } from 'firebase/database';
 import { useState } from 'react';
 
-const app = initializeFirebaseApp({ firebaseApp, roomId: 'myRoomId' });
-
-const auth = app.auth;
+const auth = getAuth(firebaseApp);
+const database = getDatabase(firebaseApp);
+const app = initializeFirebaseApp({ database, auth, roomId: 'myRoomId' });
 
 function App() {
   const [userName, setUserName] = useState('')

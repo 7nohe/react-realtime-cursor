@@ -1,9 +1,7 @@
-import { FirebaseApp } from "firebase/app";
 import { Auth } from "firebase/auth";
 import { Database, DatabaseReference } from "firebase/database";
 
 export type ReatRealtimeCursorApp = {
-    firebase: FirebaseApp;
     database: Database;
     roomId: string;
     roomRef: DatabaseReference;
