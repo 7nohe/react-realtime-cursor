@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { motion, useMotionValue } from 'framer-motion';
+import React from 'react';
 import { CursorData } from '../types';
 import { CURSOR_SIZE } from '../const';
 import { getStyle } from '../utils';
@@ -7,22 +6,12 @@ import { getStyle } from '../utils';
 type Props = CursorData & { children?: React.ReactNode };
 
 export const Cursor = ({ id, x, y, children }: Props = { id: '0', x: 0, y: 0 }) => {
-  const posX = useMotionValue(0);
-  const posY = useMotionValue(0);
-
-  useEffect(() => {
-    posX.set(x - CURSOR_SIZE / 2);
-  }, [x]);
-
-  useEffect(() => {
-    posY.set(y - CURSOR_SIZE / 2);
-  }, [y]);
 
   return (
-    <motion.div
+    <div
       style={{
-        y,
-        x,
+        top: y,
+        left: x,
         width: CURSOR_SIZE,
         height: CURSOR_SIZE,
         position: 'absolute',
@@ -30,7 +19,8 @@ export const Cursor = ({ id, x, y, children }: Props = { id: '0', x: 0, y: 0 }) 
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        border: "none"
+        border: "none",
+        pointerEvents: "none",
       }}
     >
       <svg
@@ -44,6 +34,6 @@ export const Cursor = ({ id, x, y, children }: Props = { id: '0', x: 0, y: 0 }) 
         />
       </svg>
       {children}
-    </motion.div>
+    </div>
   );
 };

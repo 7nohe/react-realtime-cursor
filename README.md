@@ -12,7 +12,7 @@
 ## Installation
 
 ```bash
-$ npm install @7nohe/react-realtime-cursor
+$ npm install firebase @7nohe/react-realtime-cursor
 ```
 
 
@@ -60,7 +60,6 @@ const database = getDatabase(firebaseApp);
 const app = initializeFirebaseApp({ database, auth, roomId: 'myRoomId' });
 
 function App() {
-
   return (
     <div className="App">
       <ReactRealtimeCursor app={app} />

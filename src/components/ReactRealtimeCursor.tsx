@@ -10,20 +10,35 @@ type Props = {
   app: ReatRealtimeCursorApp;
   autoSignIn?: boolean;
   userName?: string;
+  children?: React.ReactNode;
 };
 
-export const ReactRealtimeCursor = ({ app, autoSignIn = true, userName = '' }: Props) => {
+export const ReactRealtimeCursor = ({
+  app,
+  autoSignIn = true,
+  userName = '',
+  children,
+}: Props) => {
   // TODO: switch this handler by desired backend service
-  const handler = createFirebaseHandler(app, autoSignIn)
-  const { cursors, handleCursor } = useCursors()
+  const handler = createFirebaseHandler(app, autoSignIn);
+  const { cursors, handleCursor } = useCursors();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [myComment, setMyComment] = useState<string>('');
-  const { pos, visible, setVisible, onMouseMove } = useMouseMove(currentUserId, handler.onCursorPositionChanged, userName, myComment)
+  const { pos, visible, setVisible, onMouseMove } = useMouseMove(
+    currentUserId,
+    handler.onCursorPositionChanged,
+    userName,
+    myComment
+  );
 
   useEffect(() => {
-    handler.initialize(currentUserId, (userId) => {
-      setCurrentUserId(userId);
-    }, handleCursor);
+    handler.initialize(
+      currentUserId,
+      userId => {
+        setCurrentUserId(userId);
+      },
+      handleCursor
+    );
 
     return () => {
       handler.disconnect();
@@ -40,10 +55,20 @@ export const ReactRealtimeCursor = ({ app, autoSignIn = true, userName = '' }: P
       {Object.values(cursors).map(cursor => (
         <OtherCursor key={cursor.id} {...cursor} />
       ))}
-      {currentUserId && <MyCursor id={currentUserId} x={pos.x} y={pos.y} visible={visible} userName={userName} onCommentUpdated={(data) => {
-        handler.onCursorPositionChanged(data)
-        setMyComment(data.comment ?? '')
-      }} />}
+      {currentUserId && (
+        <MyCursor
+          id={currentUserId}
+          x={pos.x}
+          y={pos.y}
+          visible={visible}
+          userName={userName}
+          onCommentUpdated={data => {
+            handler.onCursorPositionChanged(data);
+            setMyComment(data.comment ?? '');
+          }}
+        />
+      )}
+      {children}
     </div>
   );
 };
@@ -55,5 +80,6 @@ const styles = {
     backgroundColor: 'clear',
     overflow: 'hidden',
     cursor: 'none',
-  }
-}
+    zIndex: 999999999,
+  },
+};
