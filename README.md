@@ -1,160 +1,148 @@
-# TSDX React User Guide
+# @7nohe/react-realtime-cursor
 
-Congrats! You just saved yourself hours of work by bootstrapping this project with TSDX. Let’s get you oriented with what’s here and how to use it.
+> A react component that allows you to integrate cursor chat like Figma into your web application
 
-> This TSDX setup is meant for developing React component libraries (not apps!) that can be published to NPM. If you’re looking to build a React-based app, you should use `create-react-app`, `razzle`, `nextjs`, `gatsby`, or `react-static`.
+## Features
 
-> If you’re new to TypeScript and React, checkout [this handy cheatsheet](https://github.com/sw-yx/react-typescript-cheatsheet/)
+- Real-time cursor sharing
+- Sending temporary messages with cursor
+  - Press `/` to show an input box
+  - Press `ESC` to close an input box
 
-## Commands
-
-TSDX scaffolds your new library inside `/src`, and also sets up a [Parcel-based](https://parceljs.org) playground for it inside `/example`.
-
-The recommended workflow is to run TSDX in one terminal:
-
-```bash
-npm start # or yarn start
-```
-
-This builds to `/dist` and runs the project in watch mode so any edits you save inside `src` causes a rebuild to `/dist`.
-
-Then run the example inside another:
+## Installation
 
 ```bash
-cd example
-npm i # or yarn to install dependencies
-npm start # or yarn start
+$ npm install @7nohe/react-realtime-cursor
 ```
 
-The default example imports and live reloads whatever is in `/dist`, so if you are seeing an out of date component, make sure TSDX is running in watch mode like we recommend above. **No symlinking required**, we use [Parcel's aliasing](https://parceljs.org/module_resolution.html#aliases).
 
-To do a one-off build, use `npm run build` or `yarn build`.
+## Setup
 
-To run tests, use `npm test` or `yarn test`.
+This library uses firebase as its backend.
+Therefore, you need to create a firebaes project.
 
-## Configuration
+[Here](https://firebase.google.com/docs/web/setup) is the official guide to project creation.
 
-Code quality is set up for you with `prettier`, `husky`, and `lint-staged`. Adjust the respective fields in `package.json` accordingly.
 
-### Jest
+## Usage
 
-Jest tests are set up to run with `npm test` or `yarn test`.
+For example, you can create firebase.ts for initializing your firebase app.
 
-### Bundle analysis
+```ts
+import { initializeApp } from "firebase/app";
 
-Calculates the real cost of your library using [size-limit](https://github.com/ai/size-limit) with `npm run size` and visulize it with `npm run analyze`.
+const firebaseConfig = {
+  apiKey: "xxxxx",
+  authDomain: "xxxxx",
+  databaseURL: "xxxxx",
+  projectId: "xxxxx",
+  storageBucket: "xxxxx",
+  messagingSenderId: "xxxxx",
+  appId: "xxxxx"
+};
 
-#### Setup Files
+export const firebaseApp = initializeApp(firebaseConfig);
 
-This is the folder structure we set up for you:
-
-```txt
-/example
-  index.html
-  index.tsx       # test your component here in a demo app
-  package.json
-  tsconfig.json
-/src
-  index.tsx       # EDIT THIS
-/test
-  blah.test.tsx   # EDIT THIS
-.gitignore
-package.json
-README.md         # EDIT THIS
-tsconfig.json
 ```
 
-#### React Testing Library
+After that, create a firebase instance, and pass it to a `ReactRealtimeCursor` component.
 
-We do not set up `react-testing-library` for you yet, we welcome contributions and documentation on this.
+```jsx
+import './App.css';
+import {
+  ReactRealtimeCursor,
+  initializeFirebaseApp,
+} from '@7nohe/react-realtime-cursor';
+import { firebaseApp } from '../firebase';
 
-### Rollup
+const auth = getAuth(firebaseApp);
+const database = getDatabase(firebaseApp);
+const app = initializeFirebaseApp({ database, auth, roomId: 'myRoomId' });
 
-TSDX uses [Rollup](https://rollupjs.org) as a bundler and generates multiple rollup configs for various module formats and build settings. See [Optimizations](#optimizations) for details.
+function App() {
 
-### TypeScript
-
-`tsconfig.json` is set up to interpret `dom` and `esnext` types, as well as `react` for `jsx`. Adjust according to your needs.
-
-## Continuous Integration
-
-### GitHub Actions
-
-Two actions are added by default:
-
-- `main` which installs deps w/ cache, lints, tests, and builds on all pushes against a Node and OS matrix
-- `size` which comments cost comparison of your library on every pull request using [`size-limit`](https://github.com/ai/size-limit)
-
-## Optimizations
-
-Please see the main `tsdx` [optimizations docs](https://github.com/palmerhq/tsdx#optimizations). In particular, know that you can take advantage of development-only optimizations:
-
-```js
-// ./types/index.d.ts
-declare var __DEV__: boolean;
-
-// inside your code...
-if (__DEV__) {
-  console.log('foo');
+  return (
+    <div className="App">
+      <ReactRealtimeCursor app={app} />
+    </div>
+  );
 }
+
+export default App;
+
 ```
 
-You can also choose to install and use [invariant](https://github.com/palmerhq/tsdx#invariant) and [warning](https://github.com/palmerhq/tsdx#warning) functions.
+Optionally, you can add custom sigin logic to your application.
 
-## Module Formats
+```jsx
+import './App.css';
+import {
+  ReactRealtimeCursor,
+  initializeFirebaseApp,
+} from '@7nohe/react-realtime-cursor';
+import { firebaseApp } from '../firebase';
+import { getAuth, signInAnonymously, User } from 'firebase/auth';
+import { getDatabase } from 'firebase/database';
+import { useState } from 'react';
 
-CJS, ESModules, and UMD module formats are supported.
+const auth = getAuth(firebaseApp);
+const database = getDatabase(firebaseApp);
+const app = initializeFirebaseApp({ database, auth, roomId: 'myRoomId' });
 
-The appropriate paths are configured in `package.json` and `dist/index.js` accordingly. Please report if any issues are found.
+function App() {
+  const [userName, setUserName] = useState('');
+  const [currentUser, setCurrentUser] = useState<User>();
 
-## Deploying the Example Playground
+  if (!currentUser) {
+    return (
+      <div>
+        <div>Please enter your name</div>
+        <input
+          type="text"
+          onChange={input => setUserName(input.target.value)}
+        />
+        <button
+          onClick={async () => {
+            const credential = await signInAnonymously(auth);
+            setCurrentUser(credential.user);
+          }}
+        >
+          Start
+        </button>
+      </div>
+    );
+  }
 
-The Playground is just a simple [Parcel](https://parceljs.org) app, you can deploy it anywhere you would normally deploy that. Here are some guidelines for **manually** deploying with the Netlify CLI (`npm i -g netlify-cli`):
+  return (
+    <div className="App">
+      <ReactRealtimeCursor app={app} autoSignIn={false} userName={userName} />
+    </div>
+  );
+}
 
-```bash
-cd example # if not already in the example folder
-npm run build # builds to dist
-netlify deploy # deploy the dist folder
+export default App;
 ```
 
-Alternatively, if you already have a git repo connected, you can set up continuous deployment with Netlify:
+## Documentation
 
-```bash
-netlify init
-# build command: yarn build && cd example && yarn && yarn build
-# directory to deploy: example/dist
-# pick yes for netlify.toml
+
+## `initializeFirebaseApp` options
+
+```ts
+declare type FirebaseAppOptions = {
+    database: Database;
+    auth: Auth;
+    roomId: string;
+};
+export declare const initializeFirebaseApp: (options: FirebaseAppOptions) => ReatRealtimeCursorApp;
 ```
 
-## Named Exports
+### `ReatRealtimeCursorApp` props
 
-Per Palmer Group guidelines, [always use named exports.](https://github.com/palmerhq/typescript#exports) Code split inside your React app instead of your React library.
-
-## Including Styles
-
-There are many ways to ship styles, including with CSS-in-JS. TSDX has no opinion on this, configure how you like.
-
-For vanilla CSS, you can include it at the root directory and add it to the `files` section in your `package.json`, so that it can be imported separately by your users and run through their bundler's loader.
-
-## Publishing to NPM
-
-We recommend using [np](https://github.com/sindresorhus/np).
-
-## Usage with Lerna
-
-When creating a new package with TSDX within a project set up with Lerna, you might encounter a `Cannot resolve dependency` error when trying to run the `example` project. To fix that you will need to make changes to the `package.json` file _inside the `example` directory_.
-
-The problem is that due to the nature of how dependencies are installed in Lerna projects, the aliases in the example project's `package.json` might not point to the right place, as those dependencies might have been installed in the root of your Lerna project.
-
-Change the `alias` to point to where those packages are actually installed. This depends on the directory structure of your Lerna project, so the actual path might be different from the diff below.
-
-```diff
-   "alias": {
--    "react": "../node_modules/react",
--    "react-dom": "../node_modules/react-dom"
-+    "react": "../../../node_modules/react",
-+    "react-dom": "../../../node_modules/react-dom"
-   },
+```ts
+declare type Props = {
+    app: ReatRealtimeCursorApp;
+    autoSignIn?: boolean;
+    userName?: string;
+};
 ```
-
-An alternative to fixing this problem would be to remove aliases altogether and define the dependencies referenced as aliases as dev dependencies instead. [However, that might cause other problems.](https://github.com/palmerhq/tsdx/issues/64)

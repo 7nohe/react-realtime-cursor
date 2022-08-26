@@ -13,25 +13,32 @@ const database = getDatabase(firebaseApp);
 const app = initializeFirebaseApp({ database, auth, roomId: 'myRoomId' });
 
 function App() {
-  const [userName, setUserName] = useState('')
-  const [currentUser, setCurrentUser] = useState<User>()
+  const [userName, setUserName] = useState('');
+  const [currentUser, setCurrentUser] = useState<User>();
 
   if (!currentUser) {
-    return <div style={{ flex: 1, alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-      <div>Please enter your name</div>
-      <div style={{ marginBottom: '10px' }}>
-        <input type="text" onChange={input => setUserName(input.target.value)} />
+    return (
+      <div>
+        <div>Please enter your name</div>
+        <input
+          type="text"
+          onChange={input => setUserName(input.target.value)}
+        />
+        <button
+          onClick={async () => {
+            const credential = await signInAnonymously(auth);
+            setCurrentUser(credential.user);
+          }}
+        >
+          Start
+        </button>
       </div>
-      <button onClick={async () => {
-        const credential = await signInAnonymously(auth)
-        setCurrentUser(credential.user)
-      }}>Start</button>
-    </div>
+    );
   }
 
   return (
     <div className="App">
-      <ReactRealtimeCursor app={app} autoSignIn={false} userName={userName}/>
+      <ReactRealtimeCursor app={app} autoSignIn={false} userName={userName} />
     </div>
   );
 }
