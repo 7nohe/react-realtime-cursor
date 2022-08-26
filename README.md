@@ -126,7 +126,7 @@ export default App;
 ## Documentation
 
 
-## `initializeFirebaseApp` options
+### `initializeFirebaseApp` options
 
 ```ts
 declare type FirebaseAppOptions = {
