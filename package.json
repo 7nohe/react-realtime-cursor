@@ -1,14 +1,15 @@
 {
+  "name": "@7nohe/react-realtime-cursor",
+  "description": "A react component that allows you to integrate cursor chat like Figma into your web application",
   "version": "0.1.0",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "engines": {
-    "node": ">=10"
+    "node": ">=16"
   },
   "scripts": {
     "start": "tsdx watch",
@@ -17,11 +18,12 @@
     "lint": "tsdx lint",
     "prepare": "tsdx build",
     "size": "size-limit",
-    "analyze": "size-limit --why"
+    "analyze": "size-limit --why",
+    "release": "np"
   },
   "peerDependencies": {
-    "react": ">=16",
-    "firebase": ">=9.9.2"
+    "firebase": ">=9.9.2",
+    "react": ">=18"
   },
   "husky": {
     "hooks": {
@@ -34,9 +36,14 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "@7nohe/react-realtime-cursor",
-  "author": "DAIKI URATA",
+  "author": "DAIKI URATA(@7nohe)",
   "module": "dist/react-realtime-cursor.esm.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/7nohe/react-realtime-cursor.git"
+  },
+  "homepage": "https://github.com/7nohe/react-realtime-cursor",
+  "bugs": "https://github.com/7nohe/react-realtime-cursor/issues",
   "size-limit": [
     {
       "path": "dist/react-realtime-cursor.cjs.production.min.js",
@@ -51,13 +58,14 @@
     "@size-limit/preset-small-lib": "^8.0.0",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "firebase": "^9.9.2",
     "husky": "^8.0.1",
+    "np": "^7.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "size-limit": "^8.0.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.4.0",
-    "firebase": "^9.9.2",
     "typescript": "^4.7.4"
   },
   "dependencies": {
