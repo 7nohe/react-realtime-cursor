@@ -38,7 +38,9 @@ function App() {
 
   return (
     <div className="App">
-      <ReactRealtimeCursor app={app} autoSignIn={false} userName={userName} />
+        <ReactRealtimeCursor app={app} autoSignIn={false} userName={userName} >
+          <button onClick={() => console.log('Clicked')}>Click me</button>
+        </ReactRealtimeCursor>
     </div>
   );
 }

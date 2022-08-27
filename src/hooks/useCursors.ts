@@ -1,10 +1,8 @@
-import { useState } from "react";
-import { CursorData } from "../types";
+import { useState } from 'react';
+import { CursorData } from '../types';
 
 export const useCursors = () => {
-    const [cursors, setCursors] = useState<
-    Record<string, CursorData>
-  >({});
+  const [cursors, setCursors] = useState<Record<string, CursorData>>({});
 
   const handleCursor = (
     event: string,
@@ -38,6 +36,6 @@ export const useCursors = () => {
   return {
     cursors,
     setCursors,
-    handleCursor
-  }
-}
+    handleCursor,
+  };
+};

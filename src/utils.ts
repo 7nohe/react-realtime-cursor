@@ -1,4 +1,4 @@
-import { CURSOR_STYLE } from "./const";
+import { CURSOR_STYLE } from './const';
 
 type ThrottledFunction<T extends (...args: any) => any> = (
   ...args: Parameters<T>
