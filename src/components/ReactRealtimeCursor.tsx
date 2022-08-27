@@ -5,6 +5,7 @@ import { createFirebaseHandler } from '../libs/firebase';
 import { ReatRealtimeCursorApp } from '../types';
 import { MyCursor } from './MyCursor';
 import { OtherCursor } from './OtherCursor';
+import '../styles/react-realtime-cursor.css';
 
 type Props = {
   app: ReatRealtimeCursorApp;
@@ -43,14 +44,14 @@ export const ReactRealtimeCursor = ({
     return () => {
       handler.disconnect();
     };
-  }, [currentUserId]);
+  }, [currentUserId, handleCursor, handler]);
 
   return (
     <div
+      className="react-realtime-cursor"
       onMouseMove={onMouseMove}
       onMouseLeave={() => setVisible(false)}
       onMouseEnter={() => setVisible(true)}
-      style={styles.container}
     >
       {Object.values(cursors).map(cursor => (
         <OtherCursor key={cursor.id} {...cursor} />
@@ -71,15 +72,4 @@ export const ReactRealtimeCursor = ({
       {children}
     </div>
   );
-};
-
-const styles = {
-  container: {
-    height: '100vh',
-    width: '100vw',
-    backgroundColor: 'clear',
-    overflow: 'hidden',
-    cursor: 'none',
-    zIndex: 999999999,
-  },
 };
