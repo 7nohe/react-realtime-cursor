@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { CursorData } from '../types';
 
 export const useCursors = () => {
   const [cursors, setCursors] = useState<Record<string, CursorData>>({});
 
-  const handleCursor = (
+  const handleCursor = useCallback((
     event: string,
     userId: string | null,
     posData?: any
@@ -31,7 +31,7 @@ export const useCursors = () => {
       default:
         break;
     }
-  };
+  }, []);
 
   return {
     cursors,
