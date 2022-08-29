@@ -22,7 +22,7 @@ export const Cursor = (
         alignItems: 'center',
         border: 'none',
         pointerEvents: 'none',
-        zIndex: 999999999
+        zIndex: 999999999,
       }}
     >
       <svg
