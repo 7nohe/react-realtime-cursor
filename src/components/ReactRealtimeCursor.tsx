@@ -12,6 +12,11 @@ type Props = MouseEvents<HTMLDivElement> & {
   app: ReatRealtimeCursorApp;
   autoSignIn?: boolean;
   userName?: string;
+  cursors?: {
+    me?: {
+      visible?: boolean;
+    };
+  };
   onMouseMove?: React.MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
@@ -22,6 +27,7 @@ export const ReactRealtimeCursor = ({
   app,
   autoSignIn = true,
   userName = '',
+  cursors: cursorsOption = { me: { visible: true } },
   onMouseMove,
   onMouseLeave,
   onMouseEnter,
@@ -77,7 +83,7 @@ export const ReactRealtimeCursor = ({
       {Object.values(cursors).map(cursor => (
         <OtherCursor key={cursor.id} {...cursor} />
       ))}
-      {currentUserId && (
+      {cursorsOption?.me?.visible && currentUserId && (
         <MyCursor
           id={currentUserId}
           x={pos.x}
