@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { CursorData } from '../types';
 import { throttle } from '../utils';
 
@@ -10,24 +10,17 @@ export const useMouseMove = (
 ) => {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [visible, setVisible] = useState(false);
+  const _onCursorPositionChanged = ({ x, y }: { x: number; y: number }) => {
+    if (!currentUserId) {
+      console.error(
+        'Unable to save cursor positions because you are not logged in'
+      );
+      return;
+    }
+    onCursorPositionChanged({ id: currentUserId, x, y, userName, comment });
+  };
 
-  const _onCursorPositionChanged = useCallback(
-    ({ x, y }: { x: number; y: number }) => {
-      if (!currentUserId) {
-        console.error(
-          'Unable to save cursor positions because you are not logged in'
-        );
-        return;
-      }
-      onCursorPositionChanged({ id: currentUserId, x, y, userName, comment });
-    },
-    [currentUserId, userName, comment, onCursorPositionChanged]
-  );
-
-  const throttlePositionChange = useCallback(
-    throttle(_onCursorPositionChanged, 20),
-    [onCursorPositionChanged]
-  );
+  const throttlePositionChange = throttle(_onCursorPositionChanged, 20);
 
   const setPositionOnMouseMove = (e: { clientX: number; clientY: number }) => {
     if (!visible) {
