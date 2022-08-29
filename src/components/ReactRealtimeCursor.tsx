@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useCursors } from '../hooks/useCursors';
 import { useMouseMove } from '../hooks/useMouseMove';
 import { createFirebaseHandler } from '../libs/firebase';
@@ -29,7 +29,10 @@ export const ReactRealtimeCursor = ({
   ...props
 }: Props) => {
   // TODO: switch this handler by desired backend service
-  const handler = createFirebaseHandler(app, autoSignIn);
+  const handler = useMemo(() => createFirebaseHandler(app, autoSignIn), [
+    app,
+    autoSignIn,
+  ]);
   const { cursors, handleCursor } = useCursors();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [myComment, setMyComment] = useState<string>('');
@@ -52,7 +55,7 @@ export const ReactRealtimeCursor = ({
     return () => {
       handler.disconnect();
     };
-  }, [currentUserId]);
+  }, [currentUserId, handler, handleCursor]);
 
   return (
     <div
