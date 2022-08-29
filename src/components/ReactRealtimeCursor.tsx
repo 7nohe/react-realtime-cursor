@@ -6,11 +6,15 @@ import { ReatRealtimeCursorApp } from '../types';
 import { MyCursor } from './MyCursor';
 import { OtherCursor } from './OtherCursor';
 import '../styles/react-realtime-cursor.css';
+import { MouseEvents } from '../types';
 
-type Props = {
+type Props = MouseEvents<HTMLDivElement> & {
   app: ReatRealtimeCursorApp;
   autoSignIn?: boolean;
   userName?: string;
+  onMouseMove?: React.MouseEventHandler<HTMLDivElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
+  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
   children?: React.ReactNode;
 };
 
@@ -18,14 +22,18 @@ export const ReactRealtimeCursor = ({
   app,
   autoSignIn = true,
   userName = '',
+  onMouseMove,
+  onMouseLeave,
+  onMouseEnter,
   children,
+  ...props
 }: Props) => {
   // TODO: switch this handler by desired backend service
   const handler = createFirebaseHandler(app, autoSignIn);
   const { cursors, handleCursor } = useCursors();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [myComment, setMyComment] = useState<string>('');
-  const { pos, visible, setVisible, onMouseMove } = useMouseMove(
+  const { pos, visible, setVisible, setPositionOnMouseMove } = useMouseMove(
     currentUserId,
     handler.onCursorPositionChanged,
     userName,
@@ -49,9 +57,19 @@ export const ReactRealtimeCursor = ({
   return (
     <div
       className="react-realtime-cursor"
-      onMouseMove={onMouseMove}
-      onMouseLeave={() => setVisible(false)}
-      onMouseEnter={() => setVisible(true)}
+      {...props}
+      onMouseMove={e => {
+        setPositionOnMouseMove(e);
+        onMouseMove?.(e);
+      }}
+      onMouseLeave={e => {
+        setVisible(false);
+        onMouseLeave?.(e);
+      }}
+      onMouseEnter={e => {
+        setVisible(true);
+        onMouseEnter?.(e);
+      }}
     >
       {Object.values(cursors).map(cursor => (
         <OtherCursor key={cursor.id} {...cursor} />

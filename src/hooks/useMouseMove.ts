@@ -29,7 +29,7 @@ export const useMouseMove = (
     [onCursorPositionChanged]
   );
 
-  const onMouseMove = (e: { clientX: number; clientY: number }) => {
+  const setPositionOnMouseMove = (e: { clientX: number; clientY: number }) => {
     if (!visible) {
       setVisible(true);
     }
@@ -45,6 +45,6 @@ export const useMouseMove = (
     setPos,
     visible,
     setVisible,
-    onMouseMove,
+    setPositionOnMouseMove,
   };
 };
