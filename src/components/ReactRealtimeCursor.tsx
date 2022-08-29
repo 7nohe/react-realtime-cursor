@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useCursors } from '../hooks/useCursors';
 import { useMouseMove } from '../hooks/useMouseMove';
 import { createFirebaseHandler } from '../libs/firebase';
@@ -6,11 +6,20 @@ import { ReatRealtimeCursorApp } from '../types';
 import { MyCursor } from './MyCursor';
 import { OtherCursor } from './OtherCursor';
 import '../styles/react-realtime-cursor.css';
+import { MouseEvents } from '../types';
 
-type Props = {
+type Props = MouseEvents<HTMLDivElement> & {
   app: ReatRealtimeCursorApp;
   autoSignIn?: boolean;
   userName?: string;
+  cursors?: {
+    me?: {
+      visible?: boolean;
+    };
+  };
+  onMouseMove?: React.MouseEventHandler<HTMLDivElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
+  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
   children?: React.ReactNode;
 };
 
@@ -18,14 +27,22 @@ export const ReactRealtimeCursor = ({
   app,
   autoSignIn = true,
   userName = '',
+  cursors: cursorsOption = { me: { visible: true } },
+  onMouseMove,
+  onMouseLeave,
+  onMouseEnter,
   children,
+  ...props
 }: Props) => {
   // TODO: switch this handler by desired backend service
-  const handler = createFirebaseHandler(app, autoSignIn);
+  const handler = useMemo(() => createFirebaseHandler(app, autoSignIn), [
+    app,
+    autoSignIn,
+  ]);
   const { cursors, handleCursor } = useCursors();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [myComment, setMyComment] = useState<string>('');
-  const { pos, visible, setVisible, onMouseMove } = useMouseMove(
+  const { pos, visible, setVisible, setPositionOnMouseMove } = useMouseMove(
     currentUserId,
     handler.onCursorPositionChanged,
     userName,
@@ -44,19 +61,29 @@ export const ReactRealtimeCursor = ({
     return () => {
       handler.disconnect();
     };
-  }, [currentUserId]);
+  }, [currentUserId, handler, handleCursor]);
 
   return (
     <div
       className="react-realtime-cursor"
-      onMouseMove={onMouseMove}
-      onMouseLeave={() => setVisible(false)}
-      onMouseEnter={() => setVisible(true)}
+      {...props}
+      onMouseMove={e => {
+        setPositionOnMouseMove(e);
+        onMouseMove?.(e);
+      }}
+      onMouseLeave={e => {
+        setVisible(false);
+        onMouseLeave?.(e);
+      }}
+      onMouseEnter={e => {
+        setVisible(true);
+        onMouseEnter?.(e);
+      }}
     >
       {Object.values(cursors).map(cursor => (
         <OtherCursor key={cursor.id} {...cursor} />
       ))}
-      {currentUserId && (
+      {cursorsOption?.me?.visible && currentUserId && (
         <MyCursor
           id={currentUserId}
           x={pos.x}

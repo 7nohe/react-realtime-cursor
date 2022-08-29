@@ -114,7 +114,9 @@ function App() {
 
   return (
     <div className="App">
-      <ReactRealtimeCursor app={app} autoSignIn={false} userName={userName} />
+      <ReactRealtimeCursor app={app} autoSignIn={false} userName={userName} >
+        <button onClick={() => console.log('Clicked')}>Click me</button>
+      </ReactRealtimeCursor>
     </div>
   );
 }
@@ -139,9 +141,14 @@ export declare const initializeFirebaseApp: (options: FirebaseAppOptions) => Rea
 ### `ReatRealtimeCursorApp` props
 
 ```ts
-declare type Props = {
+declare type Props = MouseEvents<HTMLDivElement> & {
     app: ReatRealtimeCursorApp;
     autoSignIn?: boolean;
     userName?: string;
+    cursors?: {
+        me?: {
+            visible?: boolean;
+        };
+    };
 };
 ```
