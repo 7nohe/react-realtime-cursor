@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { CursorData } from '../types';
 import { getStyle } from '../utils';
 import { Cursor } from './Cursor';
@@ -8,6 +14,10 @@ type Props = CursorData & {
   onCommentUpdated?: (data: CursorData) => void;
 };
 
+const defaultInputWidth = 128;
+const defaultInputHeight = 48;
+const maxInputWidth = 250;
+
 export const MyCursor = ({
   visible = true,
   onCommentUpdated,
@@ -15,12 +25,27 @@ export const MyCursor = ({
 }: Props) => {
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const [inputWidth, setInputWidth] = useState(defaultInputWidth);
+  const [inputHeight, setInputHeight] = useState(defaultInputHeight);
+  const span = useRef<HTMLDivElement>(null);
+
+  const spanHeight = span?.current?.offsetHeight ?? 0;
+  const spanWidth = span?.current?.offsetWidth ?? 0;
+
 
   const onChangeInput = useCallback(
-    (e: any) => {
+    (e: ChangeEvent<HTMLTextAreaElement>) => {
       const inputValue = e.target.value;
       if (inputValue === '/') {
         return;
+      }
+
+      if (spanWidth <= maxInputWidth && spanWidth >= defaultInputWidth) {
+          setInputWidth(spanWidth);
+      }
+  
+      if (spanWidth >= maxInputWidth || spanHeight >= defaultInputHeight) {
+        setInputHeight(spanHeight);
       }
       setInputValue(inputValue);
       onCommentUpdated?.({ ...props, comment: inputValue });
@@ -37,6 +62,8 @@ export const MyCursor = ({
       if (e.code === 'Escape') {
         setShowInput(false);
         setInputValue('');
+        setInputWidth(defaultInputWidth);
+        setInputHeight(defaultInputHeight);
         onCommentUpdated?.({ ...props, comment: '' });
       }
     };
@@ -60,13 +87,12 @@ export const MyCursor = ({
             position: 'absolute',
             top: 16,
             left: 16,
-            minHeight: 30,
             boxSizing: 'border-box',
             padding: '0px 20px',
             display: 'flex',
             flexWrap: 'wrap',
             alignItems: 'center',
-            maxWidth: 370,
+            justifyContent: 'center',
             borderRadius: 30,
             borderTopLeftRadius: 0,
             backgroundColor: getStyle(props.id).color.default,
@@ -74,9 +100,8 @@ export const MyCursor = ({
         >
           <div
             style={{
-              minWidth: 100,
-              height: 32,
-              width: 'fit-content',
+              width: inputWidth,
+              height: inputHeight,
               borderRadius: 8,
               position: 'relative',
               fontSize: 16,
@@ -85,24 +110,34 @@ export const MyCursor = ({
               marginLeft: 15,
             }}
           >
-            <span
+            <div
               style={{
-                display: 'inline-block',
+                position: 'absolute',
+                maxWidth: maxInputWidth,
+                minWidth: defaultInputWidth,
+                minHeight: defaultInputHeight,
+                display: 'block',
+                textAlign: 'left',
+                wordWrap: 'break-word',
+                wordBreak: 'keep-all',
+                whiteSpace: 'pre-wrap',
                 visibility: 'hidden',
                 fontSize: 'inherit',
                 fontFamily: 'inherit',
+                lineHeight: 'inherit',
               }}
+              ref={span}
             >
-              {inputValue}
-            </span>
-            <input
+              {inputValue}{' '}
+            </div>
+            <textarea
               autoFocus
               placeholder="Say something"
               value={inputValue}
               onChange={onChangeInput}
               style={{
-                height: '100%',
-                width: '100%',
+                width: inputWidth,
+                height: inputHeight,
                 position: 'absolute',
                 backgroundColor: 'inherit',
                 left: 0,
@@ -110,6 +145,10 @@ export const MyCursor = ({
                 outline: 0,
                 border: 0,
                 margin: 0,
+                fontSize: 'inherit',
+                fontFamily: 'inherit',
+                resize: 'none',
+                lineHeight: 'inherit'
               }}
             />
           </div>
