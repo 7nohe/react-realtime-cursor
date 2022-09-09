@@ -27,12 +27,11 @@ export const MyCursor = ({
   const [inputValue, setInputValue] = useState('');
   const [inputWidth, setInputWidth] = useState(defaultInputWidth);
   const [inputHeight, setInputHeight] = useState(defaultInputHeight);
-  const [maxWidthReaced, setMaxWidthReaced] = useState(false);
+  const [maxWidthReached, setMaxWidthReaced] = useState(false);
   const span = useRef<HTMLDivElement>(null);
 
   const spanHeight = span?.current?.offsetHeight ?? 0;
   const spanWidth = span?.current?.offsetWidth ?? 0;
-
 
   const onChangeInput = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -41,21 +40,25 @@ export const MyCursor = ({
         return;
       }
 
-      if (spanWidth <= maxInputWidth && spanWidth >= defaultInputWidth && !maxWidthReaced) {
-          setInputWidth(spanWidth);
+      if (
+        spanWidth <= maxInputWidth &&
+        spanWidth >= defaultInputWidth &&
+        !maxWidthReached
+      ) {
+        setInputWidth(spanWidth);
       }
 
-      if (spanWidth >= maxInputWidth && !maxWidthReaced) {
-        setMaxWidthReaced(true)
+      if (spanWidth >= maxInputWidth && !maxWidthReached) {
+        setMaxWidthReaced(true);
       }
-  
+
       if (spanWidth >= maxInputWidth || spanHeight >= defaultInputHeight) {
         setInputHeight(spanHeight);
       }
       setInputValue(inputValue);
       onCommentUpdated?.({ ...props, comment: inputValue });
     },
-    [props, onCommentUpdated]
+    [props, onCommentUpdated, maxWidthReached, spanHeight, spanWidth]
   );
 
   useEffect(() => {
@@ -126,7 +129,7 @@ export const MyCursor = ({
                 textAlign: 'left',
                 wordWrap: 'break-word',
                 wordBreak: 'keep-all',
-                whiteSpace: maxWidthReaced ? 'pre-wrap' : 'pre',
+                whiteSpace: maxWidthReached ? 'pre-wrap' : 'pre',
                 visibility: 'hidden',
                 fontSize: 'inherit',
                 fontFamily: 'inherit',
@@ -149,7 +152,7 @@ export const MyCursor = ({
                 position: 'absolute',
                 backgroundColor: 'inherit',
                 wordBreak: 'keep-all',
-                whiteSpace: maxWidthReaced ? 'pre-wrap' : 'pre',
+                whiteSpace: maxWidthReached ? 'pre-wrap' : 'pre',
                 left: 0,
                 top: 0,
                 outline: 0,
@@ -159,7 +162,7 @@ export const MyCursor = ({
                 fontWeight: 'inherit',
                 fontFamily: 'inherit',
                 resize: 'none',
-                lineHeight: 'inherit'
+                lineHeight: 'inherit',
               }}
             />
           </div>

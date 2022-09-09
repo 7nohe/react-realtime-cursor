@@ -44,7 +44,7 @@ export const OtherCursor = (
               style={{
                 height: 'fit-content',
                 width: 'fit-content',
-                textAlign: 'left'
+                textAlign: 'left',
               }}
             >
               {userName && (

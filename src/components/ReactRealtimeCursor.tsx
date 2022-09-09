@@ -63,7 +63,7 @@ export const ReactRealtimeCursor = ({
     };
   }, [currentUserId, handler, handleCursor]);
 
-  const divRef = useRef<HTMLDivElement>(null)
+  const divRef = useRef<HTMLDivElement>(null);
 
   return (
     <div
