@@ -4,7 +4,7 @@ import { throttle } from '../utils';
 
 export const useMouseMove = (
   currentUserId: string | null,
-  onCursorPositionChanged: (data: CursorData) => void,
+  onCursorPositionChanged: (data: Omit<CursorData, 'offsetX' | 'offsetY' >) => void,
   userName?: string,
   comment?: string
 ) => {

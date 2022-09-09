@@ -3,13 +3,13 @@ import { CursorData } from '../types';
 import { getStyle } from '../utils';
 import { Cursor } from './Cursor';
 
-type Props = CursorData;
+type Props = Omit<CursorData, 'offsetX' | 'offsetY'>;
 
 export const OtherCursor = (
-  { id, x, y, userName, comment }: Props = { id: '0', x: 0, y: 0 }
+  { id, x, y, comment, userName }: Props = { id: '0', x: 0, y: 0 }
 ) => {
   return (
-    <Cursor id={id} x={x} y={y}>
+    <Cursor id={id} x={x} offsetX={0}  y={y} offsetY={0}>
       {comment && comment?.length > 0 && (
         <div
           style={{

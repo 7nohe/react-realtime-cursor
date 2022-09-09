@@ -6,13 +6,13 @@ import { getStyle } from '../utils';
 type Props = CursorData & { children?: React.ReactNode };
 
 export const Cursor = (
-  { id, x, y, children }: Props = { id: '0', x: 0, y: 0 }
+  { id, x, y, offsetX, offsetY, children }: Props = { id: '0', x: 0, y: 0, offsetX: 0, offsetY: 0 }
 ) => {
   return (
     <div
       style={{
-        top: y,
-        left: x,
+        top: y + offsetY,
+        left: x + offsetX,
         width: CURSOR_SIZE,
         height: CURSOR_SIZE,
         position: 'absolute',

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useCursors } from '../hooks/useCursors';
 import { useMouseMove } from '../hooks/useMouseMove';
 import { createFirebaseHandler } from '../libs/firebase';
@@ -65,6 +65,16 @@ export const ReactRealtimeCursor = ({
 
   const divRef = useRef<HTMLDivElement>(null)
 
+  const [scrollPosition, setPosition] = useState({ x: 0, y: 0 });
+  useLayoutEffect(() => {
+    const updatePosition = () => {
+      setPosition({ y: window.scrollY, x: window.scrollX });
+    }
+    window.addEventListener('scroll', updatePosition);
+    updatePosition();
+    return () => window.removeEventListener('scroll', updatePosition);
+  }, []);
+
   return (
     <div
       ref={divRef}
@@ -91,6 +101,8 @@ export const ReactRealtimeCursor = ({
           id={currentUserId}
           x={pos.x}
           y={pos.y}
+          offsetX={scrollPosition.x}
+          offsetY={scrollPosition.y}
           visible={visible}
           userName={userName}
           onCommentUpdated={data => {

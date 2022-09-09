@@ -14,6 +14,8 @@ export type CursorData = {
   id: string;
   x: number;
   y: number;
+  offsetX: number;
+  offsetY: number;
   userName?: string;
   comment?: string;
 };
@@ -25,7 +27,7 @@ export type CursorHandler = {
     handleCursor: (eventName: string, key: string | null, value: any) => void
   ) => void;
   disconnect: () => void;
-  onCursorPositionChanged: (data: CursorData) => void;
+  onCursorPositionChanged: (data: Omit<CursorData, 'offsetX' | 'offsetY'>) => void;
 };
 
 export type MouseEvents<T> = Pick<
