@@ -14,7 +14,7 @@ type Props = CursorData & {
   onCommentUpdated?: (data: CursorData) => void;
 };
 
-const defaultInputWidth = 128;
+const defaultInputWidth = 144;
 const defaultInputHeight = 48;
 const maxInputWidth = 250;
 
@@ -27,6 +27,7 @@ export const MyCursor = ({
   const [inputValue, setInputValue] = useState('');
   const [inputWidth, setInputWidth] = useState(defaultInputWidth);
   const [inputHeight, setInputHeight] = useState(defaultInputHeight);
+  const [maxWidthReaced, setMaxWidthReaced] = useState(false);
   const span = useRef<HTMLDivElement>(null);
 
   const spanHeight = span?.current?.offsetHeight ?? 0;
@@ -40,8 +41,12 @@ export const MyCursor = ({
         return;
       }
 
-      if (spanWidth <= maxInputWidth && spanWidth >= defaultInputWidth) {
+      if (spanWidth <= maxInputWidth && spanWidth >= defaultInputWidth && !maxWidthReaced) {
           setInputWidth(spanWidth);
+      }
+
+      if (spanWidth >= maxInputWidth && !maxWidthReaced) {
+        setMaxWidthReaced(true)
       }
   
       if (spanWidth >= maxInputWidth || spanHeight >= defaultInputHeight) {
@@ -64,6 +69,7 @@ export const MyCursor = ({
         setInputValue('');
         setInputWidth(defaultInputWidth);
         setInputHeight(defaultInputHeight);
+        setMaxWidthReaced(false);
         onCommentUpdated?.({ ...props, comment: '' });
       }
     };
@@ -88,7 +94,7 @@ export const MyCursor = ({
             top: 16,
             left: 16,
             boxSizing: 'border-box',
-            padding: '0px 20px',
+            padding: '10px 20px',
             display: 'flex',
             flexWrap: 'wrap',
             alignItems: 'center',
@@ -120,11 +126,12 @@ export const MyCursor = ({
                 textAlign: 'left',
                 wordWrap: 'break-word',
                 wordBreak: 'keep-all',
-                whiteSpace: 'pre-wrap',
+                whiteSpace: maxWidthReaced ? 'pre-wrap' : 'pre',
                 visibility: 'hidden',
                 fontSize: 'inherit',
                 fontFamily: 'inherit',
                 lineHeight: 'inherit',
+                fontWeight: 'inherit',
               }}
               ref={span}
             >
@@ -135,17 +142,21 @@ export const MyCursor = ({
               placeholder="Say something"
               value={inputValue}
               onChange={onChangeInput}
+              className="react-realtime-cursor_chat-textarea"
               style={{
                 width: inputWidth,
                 height: inputHeight,
                 position: 'absolute',
                 backgroundColor: 'inherit',
+                wordBreak: 'keep-all',
+                whiteSpace: maxWidthReaced ? 'pre-wrap' : 'pre',
                 left: 0,
                 top: 0,
                 outline: 0,
                 border: 0,
                 margin: 0,
                 fontSize: 'inherit',
+                fontWeight: 'inherit',
                 fontFamily: 'inherit',
                 resize: 'none',
                 lineHeight: 'inherit'

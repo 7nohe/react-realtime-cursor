@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useCursors } from '../hooks/useCursors';
 import { useMouseMove } from '../hooks/useMouseMove';
 import { createFirebaseHandler } from '../libs/firebase';
@@ -63,8 +63,11 @@ export const ReactRealtimeCursor = ({
     };
   }, [currentUserId, handler, handleCursor]);
 
+  const divRef = useRef<HTMLDivElement>(null)
+
   return (
     <div
+      ref={divRef}
       className="react-realtime-cursor"
       {...props}
       onMouseMove={e => {

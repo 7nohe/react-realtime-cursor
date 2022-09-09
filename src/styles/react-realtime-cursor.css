@@ -10,3 +10,7 @@
 .react-realtime-cursor * {
   cursor: none !important;
 }
+
+.react-realtime-cursor_chat-textarea::placeholder {
+  color: white;
+}
