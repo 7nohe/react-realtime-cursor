@@ -38,9 +38,14 @@ function App() {
 
   return (
     <div className="App">
-        <ReactRealtimeCursor app={app} autoSignIn={false} userName={userName} >
-          <button onClick={() => console.log('Clicked')}>Click me</button>
-        </ReactRealtimeCursor>
+      <ReactRealtimeCursor
+        app={app}
+        autoSignIn={false}
+        userName={userName}
+        style={{ backgroundColor: 'white', maxWidth: 860, maxHeight: 640, padding: 20 }}
+      >
+        <button onClick={() => console.log('Clicked')}>Click me</button>
+      </ReactRealtimeCursor>
     </div>
   );
 }

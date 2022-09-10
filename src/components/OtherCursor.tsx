@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { getCursorPosition } from '../libs/utils';
 import { CursorData } from '../types';
 import { getStyle } from '../utils';
 import { Cursor } from './Cursor';
@@ -6,10 +7,20 @@ import { Cursor } from './Cursor';
 type Props = CursorData;
 
 export const OtherCursor = (
-  { id, x, y, userName, comment }: Props = { id: '0', x: 0, y: 0 }
+  { id, ratioX, ratioY, comment, userName, offsetX, offsetY }: Props = {
+    id: '0',
+    ratioX: 0,
+    ratioY: 0,
+    offsetX: 0,
+    offsetY: 0,
+  }
 ) => {
+  const { x, y } = useMemo(() => getCursorPosition(ratioX, ratioY), [
+    ratioX,
+    ratioY,
+  ]);
   return (
-    <Cursor id={id} x={x} y={y}>
+    <Cursor id={id} x={x} offsetX={offsetX} y={y} offsetY={offsetY}>
       {comment && comment?.length > 0 && (
         <div
           style={{

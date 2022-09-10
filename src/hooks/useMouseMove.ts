@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { CursorData } from '../types';
+import { getCursorPositionRatio } from '../libs/utils';
+import { CursorChangeEvent } from '../types';
 import { throttle } from '../utils';
 
 export const useMouseMove = (
   currentUserId: string | null,
-  onCursorPositionChanged: (data: CursorData) => void,
+  onCursorPositionChanged: (data: CursorChangeEvent) => void,
   userName?: string,
   comment?: string
 ) => {
@@ -17,7 +18,14 @@ export const useMouseMove = (
       );
       return;
     }
-    onCursorPositionChanged({ id: currentUserId, x, y, userName, comment });
+    const { ratioX, ratioY } = getCursorPositionRatio(x, y);
+    onCursorPositionChanged({
+      id: currentUserId,
+      userName,
+      comment,
+      ratioX,
+      ratioY,
+    });
   };
 
   const throttlePositionChange = throttle(_onCursorPositionChanged, 20);

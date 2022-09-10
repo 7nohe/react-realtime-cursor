@@ -5,13 +5,12 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { CursorData } from '../types';
 import { getStyle } from '../utils';
-import { Cursor } from './Cursor';
+import { Cursor, CursorProps } from './Cursor';
 
-type Props = CursorData & {
+type Props = CursorProps & {
   visible: boolean;
-  onCommentUpdated?: (data: CursorData) => void;
+  onCommentUpdated?: (data: CursorProps) => void;
 };
 
 const defaultInputWidth = 144;

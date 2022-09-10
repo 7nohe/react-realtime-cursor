@@ -1,4 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  CSSProperties,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useCursors } from '../hooks/useCursors';
 import { useMouseMove } from '../hooks/useMouseMove';
 import { createFirebaseHandler } from '../libs/firebase';
@@ -7,6 +14,7 @@ import { MyCursor } from './MyCursor';
 import { OtherCursor } from './OtherCursor';
 import '../styles/react-realtime-cursor.css';
 import { MouseEvents } from '../types';
+import { getCursorPositionRatio } from '../libs/utils';
 
 type Props = MouseEvents<HTMLDivElement> & {
   app: ReatRealtimeCursorApp;
@@ -20,6 +28,7 @@ type Props = MouseEvents<HTMLDivElement> & {
   onMouseMove?: React.MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
+  style?: CSSProperties;
   children?: React.ReactNode;
 };
 
@@ -65,6 +74,16 @@ export const ReactRealtimeCursor = ({
 
   const divRef = useRef<HTMLDivElement>(null);
 
+  const [scrollPosition, setPosition] = useState({ x: 0, y: 0 });
+  useLayoutEffect(() => {
+    const updatePosition = () => {
+      setPosition({ y: window.scrollY, x: window.scrollX });
+    };
+    window.addEventListener('scroll', updatePosition);
+    updatePosition();
+    return () => window.removeEventListener('scroll', updatePosition);
+  }, []);
+
   return (
     <div
       ref={divRef}
@@ -84,17 +103,25 @@ export const ReactRealtimeCursor = ({
       }}
     >
       {Object.values(cursors).map(cursor => (
-        <OtherCursor key={cursor.id} {...cursor} />
+        <OtherCursor
+          key={cursor.id}
+          {...cursor}
+          offsetX={scrollPosition.x}
+          offsetY={scrollPosition.y}
+        />
       ))}
       {cursorsOption?.me?.visible && currentUserId && (
         <MyCursor
           id={currentUserId}
           x={pos.x}
           y={pos.y}
+          offsetX={scrollPosition.x}
+          offsetY={scrollPosition.y}
           visible={visible}
           userName={userName}
           onCommentUpdated={data => {
-            handler.onCursorPositionChanged(data);
+            const { ratioX, ratioY } = getCursorPositionRatio(data.x, data.y);
+            handler.onCursorPositionChanged({ ...data, ratioX, ratioY });
             setMyComment(data.comment ?? '');
           }}
         />

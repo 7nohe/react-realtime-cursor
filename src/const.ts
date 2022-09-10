@@ -22,3 +22,5 @@ export const CURSOR_STYLE = [
   { color: COLORS.green },
   { color: COLORS.blue },
 ];
+
+export const ROOT_CLASS_NAME = '.react-realtime-cursor';
