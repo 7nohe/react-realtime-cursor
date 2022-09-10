@@ -12,12 +12,17 @@ export type ReatRealtimeCursorApp = {
 
 export type CursorData = {
   id: string;
-  x: number;
-  y: number;
   offsetX: number;
   offsetY: number;
+  ratioX: number;
+  ratioY: number;
   userName?: string;
   comment?: string;
+};
+
+export type CursorChangeEvent = Omit<CursorData, 'offsetX' | 'offsetY'> & {
+  ratioX: number;
+  ratioY: number;
 };
 
 export type CursorHandler = {
@@ -27,7 +32,7 @@ export type CursorHandler = {
     handleCursor: (eventName: string, key: string | null, value: any) => void
   ) => void;
   disconnect: () => void;
-  onCursorPositionChanged: (data: Omit<CursorData, 'offsetX' | 'offsetY'>) => void;
+  onCursorPositionChanged: (event: CursorChangeEvent) => void;
 };
 
 export type MouseEvents<T> = Pick<

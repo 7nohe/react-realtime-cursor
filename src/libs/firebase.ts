@@ -11,7 +11,7 @@ import {
   ref,
   set,
 } from 'firebase/database';
-import { CursorData, CursorHandler, ReatRealtimeCursorApp } from '../types';
+import { CursorHandler, ReatRealtimeCursorApp } from '../types';
 
 type FirebaseAppOptions = {
   database: Database;
@@ -102,7 +102,7 @@ export const createFirebaseHandler: (
     disconnect: () => {
       off(roomRef);
     },
-    onCursorPositionChanged: (data: CursorData) => {
+    onCursorPositionChanged: data => {
       const { id } = data;
       set(child(roomIdRef, id), data);
       onDisconnect(child(roomIdRef, id)).remove();

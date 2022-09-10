@@ -5,13 +5,12 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { CursorData } from '../types';
 import { getStyle } from '../utils';
-import { Cursor } from './Cursor';
+import { Cursor, CursorProps } from './Cursor';
 
-type Props = CursorData & {
+type Props = CursorProps & {
   visible: boolean;
-  onCommentUpdated?: (data: CursorData) => void;
+  onCommentUpdated?: (data: CursorProps) => void;
 };
 
 const defaultInputWidth = 144;
@@ -33,7 +32,6 @@ export const MyCursor = ({
   const spanHeight = span?.current?.offsetHeight ?? 0;
   const spanWidth = span?.current?.offsetWidth ?? 0;
 
-
   const onChangeInput = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {
       const inputValue = e.target.value;
@@ -41,14 +39,18 @@ export const MyCursor = ({
         return;
       }
 
-      if (spanWidth <= maxInputWidth && spanWidth >= defaultInputWidth && !maxWidthReaced) {
-          setInputWidth(spanWidth);
+      if (
+        spanWidth <= maxInputWidth &&
+        spanWidth >= defaultInputWidth &&
+        !maxWidthReaced
+      ) {
+        setInputWidth(spanWidth);
       }
 
       if (spanWidth >= maxInputWidth && !maxWidthReaced) {
-        setMaxWidthReaced(true)
+        setMaxWidthReaced(true);
       }
-  
+
       if (spanWidth >= maxInputWidth || spanHeight >= defaultInputHeight) {
         setInputHeight(spanHeight);
       }
@@ -159,7 +161,7 @@ export const MyCursor = ({
                 fontWeight: 'inherit',
                 fontFamily: 'inherit',
                 resize: 'none',
-                lineHeight: 'inherit'
+                lineHeight: 'inherit',
               }}
             />
           </div>
