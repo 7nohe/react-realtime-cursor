@@ -1,11 +1,4 @@
-import React, {
-  CSSProperties,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useCursors } from '../hooks/useCursors';
 import { useMouseMove } from '../hooks/useMouseMove';
 import { createFirebaseHandler } from '../libs/firebase';
