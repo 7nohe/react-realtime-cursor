@@ -9,9 +9,9 @@ import React, {
 import { useCursors } from '../hooks/useCursors';
 import { useMouseMove } from '../hooks/useMouseMove';
 import { createFirebaseHandler } from '../libs/firebase';
-import { ReatRealtimeCursorApp } from '../types';
+import { CursorChangeEvent, ReatRealtimeCursorApp } from '../types';
 import { MyCursor } from './MyCursor';
-import { OtherCursor } from './OtherCursor';
+import { OtherCursor, OtherCursorProps } from './OtherCursor';
 import '../styles/react-realtime-cursor.css';
 import { MouseEvents } from '../types';
 import { getCursorPositionRatio } from '../libs/utils';
@@ -29,6 +29,11 @@ type Props = MouseEvents<HTMLDivElement> & {
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
   style?: CSSProperties;
+  useAbsolutePosition?: boolean;
+  offsetX?: number;
+  offsetY?: number;
+  beforeSaveCurrentPosition?: (event: CursorChangeEvent) => CursorChangeEvent;
+  beforeRenderOtherCursor: OtherCursorProps['beforeRenderOtherCursor'];
   children?: React.ReactNode;
 };
 
@@ -40,6 +45,11 @@ export const ReactRealtimeCursor = ({
   onMouseMove,
   onMouseLeave,
   onMouseEnter,
+  useAbsolutePosition = false,
+  offsetX,
+  offsetY,
+  beforeSaveCurrentPosition,
+  beforeRenderOtherCursor,
   children,
   ...props
 }: Props) => {
@@ -53,7 +63,12 @@ export const ReactRealtimeCursor = ({
   const [myComment, setMyComment] = useState<string>('');
   const { pos, visible, setVisible, setPositionOnMouseMove } = useMouseMove(
     currentUserId,
-    handler.onCursorPositionChanged,
+    e => {
+      if (beforeSaveCurrentPosition) {
+        e = beforeSaveCurrentPosition(e);
+      }
+      handler.onCursorPositionChanged(e);
+    },
     userName,
     myComment
   );
@@ -106,8 +121,10 @@ export const ReactRealtimeCursor = ({
         <OtherCursor
           key={cursor.id}
           {...cursor}
+          useAbsolutePosition={useAbsolutePosition}
           offsetX={scrollPosition.x}
           offsetY={scrollPosition.y}
+          beforeRenderOtherCursor={beforeRenderOtherCursor}
         />
       ))}
       {cursorsOption?.me?.visible && currentUserId && (
