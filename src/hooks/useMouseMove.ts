@@ -25,6 +25,8 @@ export const useMouseMove = (
       comment,
       ratioX,
       ratioY,
+      x,
+      y,
     });
   };
 

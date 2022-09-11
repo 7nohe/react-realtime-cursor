@@ -4,21 +4,56 @@ import { CursorData } from '../types';
 import { getStyle } from '../utils';
 import { Cursor } from './Cursor';
 
-type Props = CursorData;
+type PositionData = Omit<CursorData, 'id' | 'comment' | 'userName'>;
+
+export type OtherCursorProps = CursorData & {
+  useAbsolutePosition: boolean;
+  beforeRenderOtherCursor?: (data: PositionData) => PositionData;
+};
 
 export const OtherCursor = (
-  { id, ratioX, ratioY, comment, userName, offsetX, offsetY }: Props = {
+  {
+    id,
+    ratioX,
+    ratioY,
+    comment,
+    userName,
+    offsetX,
+    offsetY,
+    useAbsolutePosition,
+    x,
+    y,
+    beforeRenderOtherCursor,
+  }: OtherCursorProps = {
     id: '0',
     ratioX: 0,
     ratioY: 0,
     offsetX: 0,
     offsetY: 0,
+    useAbsolutePosition: false,
+    x: 0,
+    y: 0,
   }
 ) => {
-  const { x, y } = useMemo(() => getCursorPosition(ratioX, ratioY), [
-    ratioX,
-    ratioY,
-  ]);
+  ({ x, y } = useMemo(() => {
+    if (useAbsolutePosition) {
+      return {
+        x,
+        y,
+      };
+    }
+    return getCursorPosition(ratioX, ratioY);
+  }, [ratioX, ratioY, x, y, useAbsolutePosition]));
+  if (beforeRenderOtherCursor) {
+    ({ x, y, ratioX, ratioY, offsetX, offsetY } = beforeRenderOtherCursor({
+      x,
+      y,
+      ratioX,
+      ratioY,
+      offsetX,
+      offsetY,
+    }));
+  }
   return (
     <Cursor id={id} x={x} offsetX={offsetX} y={y} offsetY={offsetY}>
       {comment && comment?.length > 0 && (

@@ -12,6 +12,8 @@ export type ReatRealtimeCursorApp = {
 
 export type CursorData = {
   id: string;
+  x: number;
+  y: number;
   offsetX: number;
   offsetY: number;
   ratioX: number;
