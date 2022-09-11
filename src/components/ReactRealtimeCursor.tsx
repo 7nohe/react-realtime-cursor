@@ -33,7 +33,7 @@ type Props = MouseEvents<HTMLDivElement> & {
   offsetX?: number;
   offsetY?: number;
   beforeSaveCurrentPosition?: (event: CursorChangeEvent) => CursorChangeEvent;
-  beforeRenderOtherCursor: OtherCursorProps['beforeRenderOtherCursor'];
+  beforeRenderOtherCursor?: OtherCursorProps['beforeRenderOtherCursor'];
   children?: React.ReactNode;
 };
 
