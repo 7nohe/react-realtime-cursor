@@ -8,7 +8,8 @@ export const COLORS = {
   purple: { default: "#AA44FF" },
 };
 
-export const CURSOR_SIZE = 16;
+export const CURSOR_WIDTH = 18;
+export const CURSOR_HEIGHT = 20;
 
 export const CURSOR_STYLE = [
   { color: COLORS.red },
