@@ -88,7 +88,7 @@ export const MyCursor = ({
   }
 
   return (
-    <Cursor {...props}>
+    <Cursor {...props} color="#000000">
       {showInput && (
         <div
           style={{
