@@ -24,7 +24,7 @@ export const Cursor = (
     <div
       style={{
         top: y + offsetY,
-        left: x + offsetX,
+        left: x + offsetX - 2,
         width: CURSOR_WIDTH,
         height: CURSOR_HEIGHT,
         position: "absolute",
@@ -40,7 +40,6 @@ export const Cursor = (
       <svg
         width={CURSOR_WIDTH}
         height={CURSOR_HEIGHT}
-        viewBox="0 0 20 22"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
