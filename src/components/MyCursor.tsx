@@ -4,9 +4,9 @@ import React, {
   useEffect,
   useRef,
   useState,
-} from 'react';
-import { getStyle } from '../utils';
-import { Cursor, CursorProps } from './Cursor';
+} from "react";
+import { getStyle } from "../libs/utils";
+import { Cursor, CursorProps } from "./Cursor";
 
 type Props = CursorProps & {
   visible: boolean;
@@ -23,7 +23,7 @@ export const MyCursor = ({
   ...props
 }: Props) => {
   const [showInput, setShowInput] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [inputWidth, setInputWidth] = useState(defaultInputWidth);
   const [inputHeight, setInputHeight] = useState(defaultInputHeight);
   const [maxWidthReached, setMaxWidthReaced] = useState(false);
@@ -35,7 +35,7 @@ export const MyCursor = ({
   const onChangeInput = useCallback(
     (e: ChangeEvent<HTMLTextAreaElement>) => {
       const inputValue = e.target.value;
-      if (inputValue === '/') {
+      if (inputValue === "/") {
         return;
       }
 
@@ -62,24 +62,24 @@ export const MyCursor = ({
 
   useEffect(() => {
     const keydown = (e: KeyboardEvent) => {
-      if (e.code === 'Slash') {
+      if (e.code === "Slash") {
         setShowInput(true);
       }
 
-      if (e.code === 'Escape') {
+      if (e.code === "Escape") {
         setShowInput(false);
-        setInputValue('');
+        setInputValue("");
         setInputWidth(defaultInputWidth);
         setInputHeight(defaultInputHeight);
         setMaxWidthReaced(false);
-        onCommentUpdated?.({ ...props, comment: '' });
+        onCommentUpdated?.({ ...props, comment: "" });
       }
     };
 
-    document.addEventListener('keydown', keydown);
+    document.addEventListener("keydown", keydown);
 
     return () => {
-      document.removeEventListener('keydown', keydown);
+      document.removeEventListener("keydown", keydown);
     };
   }, [props, onCommentUpdated]);
 
@@ -92,15 +92,15 @@ export const MyCursor = ({
       {showInput && (
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 16,
             left: 16,
-            boxSizing: 'border-box',
-            padding: '10px 20px',
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'center',
+            boxSizing: "border-box",
+            padding: "10px 20px",
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "center",
             borderRadius: 30,
             borderTopLeftRadius: 0,
             backgroundColor: getStyle(props.id).color.default,
@@ -111,33 +111,33 @@ export const MyCursor = ({
               width: inputWidth,
               height: inputHeight,
               borderRadius: 8,
-              position: 'relative',
+              position: "relative",
               fontSize: 16,
-              color: '#fff',
-              padding: '5px 0',
+              color: "#fff",
+              padding: "5px 0",
               marginLeft: 15,
             }}
           >
             <div
               style={{
-                position: 'absolute',
+                position: "absolute",
                 maxWidth: maxInputWidth,
                 minWidth: defaultInputWidth,
                 minHeight: defaultInputHeight,
-                display: 'block',
-                textAlign: 'left',
-                wordWrap: 'break-word',
-                wordBreak: 'keep-all',
-                whiteSpace: maxWidthReached ? 'pre-wrap' : 'pre',
-                visibility: 'hidden',
-                fontSize: 'inherit',
-                fontFamily: 'inherit',
-                lineHeight: 'inherit',
-                fontWeight: 'inherit',
+                display: "block",
+                textAlign: "left",
+                wordWrap: "break-word",
+                wordBreak: "keep-all",
+                whiteSpace: maxWidthReached ? "pre-wrap" : "pre",
+                visibility: "hidden",
+                fontSize: "inherit",
+                fontFamily: "inherit",
+                lineHeight: "inherit",
+                fontWeight: "inherit",
               }}
               ref={span}
             >
-              {inputValue}{' '}
+              {inputValue}{" "}
             </div>
             <textarea
               autoFocus
@@ -148,20 +148,20 @@ export const MyCursor = ({
               style={{
                 width: inputWidth,
                 height: inputHeight,
-                position: 'absolute',
-                backgroundColor: 'inherit',
-                wordBreak: 'keep-all',
-                whiteSpace: maxWidthReached ? 'pre-wrap' : 'pre',
+                position: "absolute",
+                backgroundColor: "inherit",
+                wordBreak: "keep-all",
+                whiteSpace: maxWidthReached ? "pre-wrap" : "pre",
                 left: 0,
                 top: 0,
                 outline: 0,
                 border: 0,
                 margin: 0,
-                fontSize: 'inherit',
-                fontWeight: 'inherit',
-                fontFamily: 'inherit',
-                resize: 'none',
-                lineHeight: 'inherit',
+                fontSize: "inherit",
+                fontWeight: "inherit",
+                fontFamily: "inherit",
+                resize: "none",
+                lineHeight: "inherit",
               }}
             />
           </div>

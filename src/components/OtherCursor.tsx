@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react';
-import { getCursorPosition } from '../libs/utils';
-import { CursorData } from '../types';
-import { getStyle } from '../utils';
-import { Cursor } from './Cursor';
+import React, { useMemo } from "react";
+import { getCursorPosition } from "../libs/utils";
+import { CursorData } from "../types";
+import { getStyle } from "../libs/utils";
+import { Cursor } from "./Cursor";
 
-type PositionData = Omit<CursorData, 'id' | 'comment' | 'userName'>;
+type PositionData = Omit<CursorData, "id" | "comment" | "userName">;
 
 export type OtherCursorProps = CursorData & {
   useAbsolutePosition: boolean;
@@ -25,7 +25,7 @@ export const OtherCursor = (
     y,
     beforeRenderOtherCursor,
   }: OtherCursorProps = {
-    id: '0',
+    id: "0",
     ratioX: 0,
     ratioY: 0,
     offsetX: 0,
@@ -59,15 +59,15 @@ export const OtherCursor = (
       {comment && comment?.length > 0 && (
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 16,
             left: 16,
             minHeight: 30,
-            boxSizing: 'border-box',
-            padding: '0px 20px',
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
+            boxSizing: "border-box",
+            padding: "0px 20px",
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
             maxWidth: 370,
             borderRadius: 30,
             borderTopLeftRadius: 0,
@@ -78,23 +78,23 @@ export const OtherCursor = (
             style={{
               minWidth: 160,
               borderRadius: 8,
-              position: 'relative',
+              position: "relative",
               fontSize: 16,
-              color: '#fff',
-              padding: '10px 0',
+              color: "#fff",
+              padding: "10px 0",
               marginLeft: 15,
-              overflow: 'hidden',
+              overflow: "hidden",
             }}
           >
             <div
               style={{
-                height: 'fit-content',
-                width: 'fit-content',
-                textAlign: 'left',
+                height: "fit-content",
+                width: "fit-content",
+                textAlign: "left",
               }}
             >
               {userName && (
-                <div style={{ textAlign: 'left', fontSize: 14 }}>
+                <div style={{ textAlign: "left", fontSize: 14 }}>
                   {userName}
                 </div>
               )}
