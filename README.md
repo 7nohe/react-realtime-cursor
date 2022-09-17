@@ -15,14 +15,12 @@
 $ npm install firebase @7nohe/react-realtime-cursor
 ```
 
-
 ## Setup
 
 This library uses firebase as its backend.
 Therefore, you need to create a firebaes project.
 
 [Here](https://firebase.google.com/docs/web/setup) is the official guide to project creation.
-
 
 ## Usage
 
@@ -38,26 +36,25 @@ const firebaseConfig = {
   projectId: "xxxxx",
   storageBucket: "xxxxx",
   messagingSenderId: "xxxxx",
-  appId: "xxxxx"
+  appId: "xxxxx",
 };
 
 export const firebaseApp = initializeApp(firebaseConfig);
-
 ```
 
 After that, create a firebase instance, and pass it to a `ReactRealtimeCursor` component.
 
 ```jsx
-import './App.css';
+import "./App.css";
 import {
   ReactRealtimeCursor,
   initializeFirebaseApp,
-} from '@7nohe/react-realtime-cursor';
-import { firebaseApp } from '../firebase';
+} from "@7nohe/react-realtime-cursor";
+import { firebaseApp } from "../firebase";
 
 const auth = getAuth(firebaseApp);
 const database = getDatabase(firebaseApp);
-const app = initializeFirebaseApp({ database, auth, roomId: 'myRoomId' });
+const app = initializeFirebaseApp({ database, auth, roomId: "myRoomId" });
 
 function App() {
   return (
@@ -68,7 +65,6 @@ function App() {
 }
 
 export default App;
-
 ```
 
 Optionally, you can add custom sigin logic to your application.
@@ -126,29 +122,30 @@ export default App;
 
 ## Documentation
 
-
 ### `initializeFirebaseApp` options
 
 ```ts
 declare type FirebaseAppOptions = {
-    database: Database;
-    auth: Auth;
-    roomId: string;
+  database: Database;
+  auth: Auth;
+  roomId: string;
 };
-export declare const initializeFirebaseApp: (options: FirebaseAppOptions) => ReatRealtimeCursorApp;
+export declare const initializeFirebaseApp: (
+  options: FirebaseAppOptions
+) => ReatRealtimeCursorApp;
 ```
 
 ### `ReatRealtimeCursorApp` props
 
 ```ts
 declare type Props = MouseEvents<HTMLDivElement> & {
-    app: ReatRealtimeCursorApp;
-    autoSignIn?: boolean;
-    userName?: string;
-    cursors?: {
-        me?: {
-            visible?: boolean;
-        };
+  app: ReatRealtimeCursorApp;
+  autoSignIn?: boolean;
+  userName?: string;
+  cursors?: {
+    me?: {
+      visible?: boolean;
     };
+  };
 };
 ```

@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { getCursorPositionRatio } from '../libs/utils';
-import { CursorChangeEvent } from '../types';
-import { throttle } from '../utils';
+import { useState } from "react";
+import { getCursorPositionRatio } from "../libs/utils";
+import { CursorChangeEvent } from "../types";
+import { throttle } from "../libs/utils";
 
 export const useMouseMove = (
   currentUserId: string | null,
@@ -14,7 +14,7 @@ export const useMouseMove = (
   const _onCursorPositionChanged = ({ x, y }: { x: number; y: number }) => {
     if (!currentUserId) {
       console.error(
-        'Unable to save cursor positions because you are not logged in'
+        "Unable to save cursor positions because you are not logged in"
       );
       return;
     }
