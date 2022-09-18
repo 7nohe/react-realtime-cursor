@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/9207663/190860564-dc2b3516-28a2-4249-a420-d8f33b4f6c69.png" height="280px">
+  <img src="https://user-images.githubusercontent.com/9207663/190860564-dc2b3516-28a2-4249-a420-d8f33b4f6c69.png" >
   <p align="center">Figma-like cursor chat for React<p>
   <p align="center">
     <a href="https://www.npmjs.com/package/@7nohe/react-realtime-cursor">
