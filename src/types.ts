@@ -1,13 +1,19 @@
 import { Auth } from "firebase/auth";
 import { Database, DatabaseReference } from "firebase/database";
 import { DOMAttributes } from "react";
+import { CognitoUserAmplify } from "@aws-amplify/ui/dist/types/types/authenticator";
 
-export type ReatRealtimeCursorApp = {
+export type FirebaseApp = {
   database: Database;
   roomId: string;
   roomRef: DatabaseReference;
   roomIdRef: DatabaseReference;
   auth: Auth;
+};
+
+export type AmplifyApp = {
+  roomId: string;
+  cognitoUser: CognitoUserAmplify;
 };
 
 export type CursorData = {
@@ -32,7 +38,7 @@ export type CursorHandler = {
     currentUserId: string | null,
     onUserIdChanged: (userId: string | null) => void,
     handleCursor: (eventName: string, key: string | null, value: any) => void
-  ) => void;
+  ) => Promise<{ disconnect: () => void } | undefined>;
   disconnect: () => void;
   onCursorPositionChanged: (event: CursorChangeEvent) => void;
 };
@@ -76,3 +82,5 @@ export type MouseEvents<T> = Pick<
   | "onMouseUp"
   | "onMouseUpCapture"
 >;
+
+export type BackendType = "firebase" | "amplify";

@@ -27,6 +27,7 @@
     "release": "np"
   },
   "peerDependencies": {
+    "aws-amplify": ">=4.3.35",
     "firebase": ">=9.9.2",
     "react": ">=18"
   },
@@ -38,11 +39,13 @@
   "homepage": "https://github.com/7nohe/react-realtime-cursor",
   "bugs": "https://github.com/7nohe/react-realtime-cursor/issues",
   "devDependencies": {
+    "@aws-amplify/ui": "^3.13.3",
     "@size-limit/preset-small-lib": "^8.0.0",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@typescript-eslint/eslint-plugin": "^5.37.0",
     "autoprefixer": "^10.4.8",
+    "aws-amplify": "^4.3.35",
     "cssnano": "^5.1.13",
     "esbuild": "^0.15.7",
     "eslint": "^8.23.1",
