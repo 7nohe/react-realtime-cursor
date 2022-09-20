@@ -253,22 +253,47 @@ declare type FirebaseAppOptions = {
   auth: Auth;
   roomId: string;
 };
-export declare const initializeFirebaseApp: (
+declare const initializeFirebaseApp: (
   options: FirebaseAppOptions
-) => ReatRealtimeCursorApp;
+) => FirebaseApp;
+```
+
+### `initializeAmplifyApp` options
+
+```ts
+declare type AmplifyAppOptions = {
+  roomId: string;
+};
+declare const initializeAmplifyApp: (
+  options: AmplifyAppOptions
+) => Pick<AmplifyApp, "roomId">;
 ```
 
 ### `ReatRealtimeCursorApp` props
 
 ```ts
+declare type BackendType = "firebase" | "amplify";
+
 declare type Props = MouseEvents<HTMLDivElement> & {
-  app: ReatRealtimeCursorApp;
+  app: FirebaseApp | AmplifyApp;
   autoSignIn?: boolean;
   userName?: string;
+  cognitoUser?: CognitoUserAmplify;
   cursors?: {
     me?: {
       visible?: boolean;
     };
   };
+  onMouseMove?: React.MouseEventHandler<HTMLDivElement>;
+  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
+  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
+  style?: CSSProperties;
+  useAbsolutePosition?: boolean;
+  offsetX?: number;
+  offsetY?: number;
+  beforeSaveCurrentPosition?: (event: CursorChangeEvent) => CursorChangeEvent;
+  beforeRenderOtherCursor?: OtherCursorProps["beforeRenderOtherCursor"];
+  backendType?: BackendType;
+  children?: React.ReactNode;
 };
 ```
