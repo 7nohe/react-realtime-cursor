@@ -43,3 +43,9 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+
+# Auto generated files (Amplify CLI)
+amplify
+src/API.ts
+src/graphql
+.graphqlconfig.yml

@@ -103,7 +103,6 @@ export const createAmplifyHandler: (app: AmplifyApp) => CursorHandler = (
       }).subscribe({
         next: ({ value }) => {
           const cursorData = value.data?.onCreateCursorData;
-          console.log(cursorData);
           if (cursorData?.id === currentUserId) {
             return;
           }
