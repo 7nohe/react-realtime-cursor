@@ -135,6 +135,8 @@ export default App;
 
 ## Amplify Guide
 
+**🚨Currently, It's not working due to [the issue](https://github.com/aws-amplify/amplify-js/issues/9639) on the amplify-js**
+
 ### Installation
 
 ```bash
