@@ -22,7 +22,6 @@
     "test:watch": "vitest",
     "lint": "eslint --ext .ts,.tsx",
     "prepare": "husky install",
-    "analyze": "size-limit --why",
     "release": "np"
   },
   "peerDependencies": {

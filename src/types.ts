@@ -39,7 +39,7 @@ export type CursorHandler = {
     onUserIdChanged: (userId: string | null) => void,
     handleCursor: (eventName: string, key: string | null, value: any) => void
   ) => Promise<{ disconnect: () => void } | undefined>;
-  disconnect: () => void;
+  disconnect?: () => void;
   onCursorPositionChanged: (event: CursorChangeEvent) => void;
 };
 

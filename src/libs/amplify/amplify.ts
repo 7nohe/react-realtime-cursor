@@ -157,7 +157,6 @@ export const createAmplifyHandler: (app: AmplifyApp) => CursorHandler = (
         },
       };
     },
-    disconnect: () => {},
     onCursorPositionChanged: async (data) => {
       const { id } = data;
       if (id) {

@@ -105,7 +105,7 @@ export const ReactRealtimeCursor = ({
 
     return () => {
       disconnect?.();
-      handler?.disconnect();
+      handler?.disconnect?.();
     };
   }, [currentUserId, handler, handleCursor]);
 
