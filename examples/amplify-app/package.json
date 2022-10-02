@@ -11,7 +11,7 @@
   "dependencies": {
     "@7nohe/react-realtime-cursor": "../dist",
     "@aws-amplify/ui-react": "^3.5.2",
-    "aws-amplify": "^4.3.35",
+    "aws-amplify": "^4.3.37",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
