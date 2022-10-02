@@ -8,21 +8,26 @@ import React, {
 } from "react";
 import { useCursors } from "../hooks/useCursors";
 import { useMouseMove } from "../hooks/useMouseMove";
-import { createFirebaseHandler } from "../libs/firebase";
+import { createFirebaseHandler } from "../libs/firebase/firebase";
 import {
   CursorChangeEvent,
-  ReatRealtimeCursorApp,
   MouseEvents,
+  BackendType,
+  FirebaseApp,
+  AmplifyApp,
 } from "../types";
 import { MyCursor } from "./MyCursor";
 import { OtherCursor, OtherCursorProps } from "./OtherCursor";
 import "../styles/react-realtime-cursor.css";
 import { getCursorPositionRatio } from "../libs/utils";
+import { createAmplifyHandler } from "../libs/amplify/amplify";
+import { CognitoUserAmplify } from "@aws-amplify/ui/dist/types/types/authenticator";
 
 type Props = MouseEvents<HTMLDivElement> & {
-  app: ReatRealtimeCursorApp;
+  app: FirebaseApp | AmplifyApp;
   autoSignIn?: boolean;
   userName?: string;
+  cognitoUser?: CognitoUserAmplify;
   cursors?: {
     me?: {
       visible?: boolean;
@@ -37,6 +42,7 @@ type Props = MouseEvents<HTMLDivElement> & {
   offsetY?: number;
   beforeSaveCurrentPosition?: (event: CursorChangeEvent) => CursorChangeEvent;
   beforeRenderOtherCursor?: OtherCursorProps["beforeRenderOtherCursor"];
+  backendType?: BackendType;
   children?: React.ReactNode;
 };
 
@@ -44,6 +50,7 @@ export const ReactRealtimeCursor = ({
   app,
   autoSignIn = true,
   userName = "",
+  cognitoUser,
   cursors: cursorsOption = { me: { visible: true } },
   onMouseMove,
   onMouseLeave,
@@ -53,14 +60,19 @@ export const ReactRealtimeCursor = ({
   offsetY,
   beforeSaveCurrentPosition,
   beforeRenderOtherCursor,
+  backendType = "firebase",
   children,
   ...props
 }: Props) => {
-  // TODO: switch this handler by desired backend service
-  const handler = useMemo(
-    () => createFirebaseHandler(app, autoSignIn),
-    [app, autoSignIn]
-  );
+  const handler = useMemo(() => {
+    if (backendType === "firebase" && "database" in app) {
+      return createFirebaseHandler(app, autoSignIn);
+    }
+    if (backendType === "amplify" && cognitoUser) {
+      return createAmplifyHandler({ ...app, cognitoUser });
+    }
+    return;
+  }, [app, autoSignIn]);
   const { cursors, handleCursor } = useCursors();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [myComment, setMyComment] = useState<string>("");
@@ -70,23 +82,30 @@ export const ReactRealtimeCursor = ({
       if (beforeSaveCurrentPosition) {
         e = beforeSaveCurrentPosition(e);
       }
-      handler.onCursorPositionChanged(e);
+      handler?.onCursorPositionChanged(e);
     },
     userName,
     myComment
   );
 
   useEffect(() => {
-    handler.initialize(
-      currentUserId,
-      (userId) => {
-        setCurrentUserId(userId);
-      },
-      handleCursor
-    );
+    let disconnect: (() => void) | undefined;
+    const init = async () => {
+      const res = await handler?.initialize(
+        currentUserId,
+        (userId) => {
+          setCurrentUserId(userId);
+        },
+        handleCursor
+      );
+      disconnect = res?.disconnect;
+    };
+
+    init();
 
     return () => {
-      handler.disconnect();
+      disconnect?.();
+      handler?.disconnect?.();
     };
   }, [currentUserId, handler, handleCursor]);
 
@@ -141,7 +160,7 @@ export const ReactRealtimeCursor = ({
           userName={userName}
           onCommentUpdated={(data) => {
             const { ratioX, ratioY } = getCursorPositionRatio(data.x, data.y);
-            handler.onCursorPositionChanged({ ...data, ratioX, ratioY });
+            handler?.onCursorPositionChanged({ ...data, ratioX, ratioY });
             setMyComment(data.comment ?? "");
           }}
         />

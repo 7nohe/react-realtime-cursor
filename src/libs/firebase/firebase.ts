@@ -11,7 +11,7 @@ import {
   ref,
   set,
 } from "firebase/database";
-import { CursorHandler, ReatRealtimeCursorApp } from "../types";
+import { CursorHandler, FirebaseApp } from "../../types";
 
 type FirebaseAppOptions = {
   database: Database;
@@ -21,7 +21,7 @@ type FirebaseAppOptions = {
 
 export const initializeFirebaseApp: (
   options: FirebaseAppOptions
-) => ReatRealtimeCursorApp = (options) => {
+) => FirebaseApp = (options) => {
   const { database, auth, roomId } = options;
   const roomRef = ref(database, "roomId");
   const roomIdRef = child(roomRef, roomId);
@@ -35,14 +35,14 @@ export const initializeFirebaseApp: (
 };
 
 export const createFirebaseHandler: (
-  app: ReatRealtimeCursorApp,
+  app: FirebaseApp,
   autoSignIn: boolean
 ) => CursorHandler = (
   { auth, roomRef, roomIdRef, roomId, database },
   autoSignIn
 ) => {
   return {
-    initialize: (
+    initialize: async (
       currentUserId: string | null,
       onUserIdChanged: (userId: string | null) => void,
       handleCursor: (eventName: string, key: string | null, value: any) => void
@@ -55,7 +55,7 @@ export const createFirebaseHandler: (
         }
       };
 
-      init();
+      await init();
 
       onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -78,26 +78,42 @@ export const createFirebaseHandler: (
         });
       });
 
-      onChildAdded(ref(database, "roomId/" + roomId), (snapshot) => {
-        if (snapshot.key === currentUserId) {
-          return;
+      const unsubscribeOnChildAdded = onChildAdded(
+        ref(database, "roomId/" + roomId),
+        (snapshot) => {
+          if (snapshot.key === currentUserId) {
+            return;
+          }
+          handleCursor("add", snapshot.key, snapshot.val());
         }
-        handleCursor("add", snapshot.key, snapshot.val());
-      });
+      );
 
-      onChildChanged(ref(database, "roomId/" + roomId), (snapshot) => {
-        if (snapshot.key === currentUserId) {
-          return;
+      const unsubscribeOnChildChanged = onChildChanged(
+        ref(database, "roomId/" + roomId),
+        (snapshot) => {
+          if (snapshot.key === currentUserId) {
+            return;
+          }
+          handleCursor("change", snapshot.key, snapshot.val());
         }
-        handleCursor("change", snapshot.key, snapshot.val());
-      });
+      );
 
-      onChildRemoved(ref(database, "roomId/" + roomId), (snapshot) => {
-        if (snapshot.key === currentUserId) {
-          return;
+      const unsubscriveOnChildRemoved = onChildRemoved(
+        ref(database, "roomId/" + roomId),
+        (snapshot) => {
+          if (snapshot.key === currentUserId) {
+            return;
+          }
+          handleCursor("remove", snapshot.key, snapshot.val());
         }
-        handleCursor("remove", snapshot.key, snapshot.val());
-      });
+      );
+      return {
+        disconnect: () => {
+          unsubscribeOnChildAdded();
+          unsubscribeOnChildChanged();
+          unsubscriveOnChildRemoved();
+        },
+      };
     },
     disconnect: () => {
       off(roomRef);

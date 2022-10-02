@@ -48,6 +48,7 @@ function App() {
           maxHeight: 640,
           padding: 20,
         }}
+        backendType="firebase"
       >
         <button onClick={() => console.log("Clicked")}>Click me</button>
       </ReactRealtimeCursor>

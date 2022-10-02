@@ -9,8 +9,11 @@ export default defineConfig({
     alias: {
       "@7nohe/react-realtime-cursor": path.resolve(
         __dirname,
-        "../src/index.ts"
+        "../../src/index.ts"
       ),
     },
+  },
+  define: {
+    global: {},
   },
 });
