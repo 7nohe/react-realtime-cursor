@@ -2,25 +2,23 @@ import React, {
   CSSProperties,
   useEffect,
   useLayoutEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
 import { useCursors } from "../hooks/useCursors";
 import { useMouseMove } from "../hooks/useMouseMove";
-import { createFirebaseHandler } from "../libs/firebase/firebase";
 import {
   CursorChangeEvent,
   MouseEvents,
   BackendType,
   FirebaseApp,
   AmplifyApp,
+  CursorHandler,
 } from "../types";
 import { MyCursor } from "./MyCursor";
 import { OtherCursor, OtherCursorProps } from "./OtherCursor";
 import "../styles/react-realtime-cursor.css";
 import { getCursorPositionRatio } from "../libs/utils";
-import { createAmplifyHandler } from "../libs/amplify/amplify";
 import { CognitoUserAmplify } from "@aws-amplify/ui/dist/types/types/authenticator";
 
 type Props = MouseEvents<HTMLDivElement> & {
@@ -64,15 +62,7 @@ export const ReactRealtimeCursor = ({
   children,
   ...props
 }: Props) => {
-  const handler = useMemo(() => {
-    if (backendType === "firebase" && "database" in app) {
-      return createFirebaseHandler(app, autoSignIn);
-    }
-    if (backendType === "amplify" && cognitoUser) {
-      return createAmplifyHandler({ ...app, cognitoUser });
-    }
-    return;
-  }, [app, autoSignIn]);
+  const handlerRef = useRef<CursorHandler>();
   const { cursors, handleCursor } = useCursors();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [myComment, setMyComment] = useState<string>("");
@@ -82,16 +72,33 @@ export const ReactRealtimeCursor = ({
       if (beforeSaveCurrentPosition) {
         e = beforeSaveCurrentPosition(e);
       }
-      handler?.onCursorPositionChanged(e);
+      handlerRef.current?.onCursorPositionChanged(e);
     },
     userName,
     myComment
   );
 
   useEffect(() => {
+    (async () => {
+      if (backendType === "firebase" && "database" in app) {
+        const { createFirebaseHandler } = await import(
+          "../libs/firebase/handler"
+        );
+        handlerRef.current = createFirebaseHandler(app, autoSignIn);
+      }
+      if (backendType === "amplify" && cognitoUser) {
+        const { createAmplifyHandler } = await import(
+          "../libs/amplify/handler"
+        );
+        handlerRef.current = createAmplifyHandler({ ...app, cognitoUser });
+      }
+    })();
+  }, [app, autoSignIn]);
+
+  useEffect(() => {
     let disconnect: (() => void) | undefined;
     const init = async () => {
-      const res = await handler?.initialize(
+      const res = await handlerRef.current?.initialize(
         currentUserId,
         (userId) => {
           setCurrentUserId(userId);
@@ -105,9 +112,9 @@ export const ReactRealtimeCursor = ({
 
     return () => {
       disconnect?.();
-      handler?.disconnect?.();
+      handlerRef.current?.disconnect?.();
     };
-  }, [currentUserId, handler, handleCursor]);
+  }, [currentUserId, handlerRef.current, handleCursor]);
 
   const divRef = useRef<HTMLDivElement>(null);
 
@@ -160,7 +167,11 @@ export const ReactRealtimeCursor = ({
           userName={userName}
           onCommentUpdated={(data) => {
             const { ratioX, ratioY } = getCursorPositionRatio(data.x, data.y);
-            handler?.onCursorPositionChanged({ ...data, ratioX, ratioY });
+            handlerRef.current?.onCursorPositionChanged({
+              ...data,
+              ratioX,
+              ratioY,
+            });
             setMyComment(data.comment ?? "");
           }}
         />
