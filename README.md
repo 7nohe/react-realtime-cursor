@@ -153,13 +153,13 @@ $ npm install @aws-amplify/ui-react
 
 Visit the Amplify documentation to learn how to [install the CLI](https://docs.amplify.aws/cli/).
 
-1. Initialize new project
+2. Initialize new project
 
 ```bash
 $ amplify init
 ```
 
-2. Setup GraphQL API
+3. Setup GraphQL API
 
 ```bash
 $ amplify add api
@@ -170,7 +170,7 @@ Only the following configurations are supported.
 - API Service: GraphQL
 - Authorization Type: Amazon Cognito User Pool
 
-3. Edit schema.graphql
+4. Edit schema.graphql
 
 You need to add CursorData type to schema.graphql.
 
@@ -189,7 +189,7 @@ type CursorData
 }
 ```
 
-4. Deploy the changes to the cloud
+5. Deploy the changes to the cloud
 
 ```bash
 $ amplify push
