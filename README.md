@@ -123,7 +123,7 @@ function App() {
 
   return (
     <div className="App">
-      <ReactRealtimeCursor app={app} autoSignIn={false} userName={userName} >
+      <ReactRealtimeCursor firebaseApp={app} autoSignIn={false} userName={userName} >
         <button onClick={() => console.log('Clicked')}>Click me</button>
       </ReactRealtimeCursor>
     </div>
@@ -207,10 +207,7 @@ Import and load the configuration file.
 
 ```tsx
 import "./App.css";
-import {
-  ReactRealtimeCursor,
-  initializeAmplifyApp,
-} from "@7nohe/react-realtime-cursor";
+import { ReactRealtimeCursor } from "@7nohe/react-realtime-cursor";
 import { Amplify } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import { withAuthenticator } from "@aws-amplify/ui-react";
@@ -218,16 +215,21 @@ import type { UseAuthenticator } from "@aws-amplify/ui-react/dist/types/componen
 import "@aws-amplify/ui-react/styles.css";
 Amplify.configure(awsconfig);
 
-const app = initializeAmplifyApp({ roomId: "MyRoom" });
 type Props = Partial<Pick<UseAuthenticator, "signOut" | "user">>;
 
 function App({ signOut, user }: Props) {
   return (
     <div className="App">
       <ReactRealtimeCursor
-        app={app}
+        amplifyRoomId="MyRoom"
         userName={user?.username}
         cognitoUser={user}
+        style={{
+          backgroundColor: "white",
+          maxWidth: 860,
+          maxHeight: 640,
+          padding: 20,
+        }}
         backendType="amplify"
       >
         <button onClick={() => console.log("Clicked")}>Click me</button>
@@ -258,24 +260,14 @@ declare const initializeFirebaseApp: (
 ) => FirebaseApp;
 ```
 
-### `initializeAmplifyApp` options
-
-```ts
-declare type AmplifyAppOptions = {
-  roomId: string;
-};
-declare const initializeAmplifyApp: (
-  options: AmplifyAppOptions
-) => Pick<AmplifyApp, "roomId">;
-```
-
 ### `ReatRealtimeCursorApp` props
 
 ```ts
 declare type BackendType = "firebase" | "amplify";
 
 declare type Props = MouseEvents<HTMLDivElement> & {
-  app: FirebaseApp | AmplifyApp;
+  firebaseApp?: FirebaseApp;
+  amplifyRoomId?: string;
   autoSignIn?: boolean;
   userName?: string;
   cognitoUser?: CognitoUserAmplify;
