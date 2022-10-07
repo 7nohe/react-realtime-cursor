@@ -11,6 +11,7 @@
       "require": "./dist/react-realtime-cursor.js"
     }
   },
+  "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -69,6 +70,7 @@
     "tslib": "^2.4.0",
     "typescript": "^4.8.3",
     "vite": "^3.1.6",
+    "vite-plugin-dts": "^1.6.5",
     "vitest": "^0.23.2"
   }
 }

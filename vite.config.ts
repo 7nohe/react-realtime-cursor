@@ -1,5 +1,6 @@
 import { resolve } from "path";
 import { defineConfig } from "vite";
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
   resolve: {
@@ -14,4 +15,5 @@ export default defineConfig({
       fileName: "react-realtime-cursor",
     },
   },
+  plugins: [dts()],
 });
