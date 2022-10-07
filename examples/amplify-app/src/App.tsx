@@ -1,8 +1,5 @@
 import "./App.css";
-import {
-  ReactRealtimeCursor,
-  initializeAmplifyApp,
-} from "@7nohe/react-realtime-cursor";
+import { ReactRealtimeCursor } from "../../../src";
 import { Amplify } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import { withAuthenticator } from "@aws-amplify/ui-react";
@@ -10,14 +7,13 @@ import type { UseAuthenticator } from "@aws-amplify/ui-react/dist/types/componen
 import "@aws-amplify/ui-react/styles.css";
 Amplify.configure(awsconfig);
 
-const app = initializeAmplifyApp({ roomId: "MyRoom" });
 type Props = Partial<Pick<UseAuthenticator, "signOut" | "user">>;
 
 function App({ signOut, user }: Props) {
   return (
     <div className="App">
       <ReactRealtimeCursor
-        app={app}
+        amplifyRoomId="MyRoom"
         userName={user?.username}
         cognitoUser={user}
         style={{

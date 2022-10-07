@@ -3,9 +3,14 @@
   "description": "A react component that allows you to integrate cursor chat like Figma into your web application",
   "version": "0.4.1",
   "license": "MIT",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "typings": "dist/index.d.ts",
+  "main": "dist/react-realtime-cursor.js",
+  "module": "dist/react-realtime-cursor.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/react-realtime-cursor.mjs",
+      "require": "./dist/react-realtime-cursor.js"
+    }
+  },
   "files": [
     "dist"
   ],
@@ -16,13 +21,14 @@
     "node": ">=16"
   },
   "scripts": {
-    "dev": "tsup --watch",
-    "build": "tsup",
+    "dev": "vite dev",
+    "build": "vite build",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint --ext .ts,.tsx",
     "prepare": "husky install",
-    "release": "np"
+    "release": "np",
+    "size": "size-limit"
   },
   "peerDependencies": {
     "aws-amplify": ">=4.3.37",
@@ -59,9 +65,10 @@
     "prettier": "^2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "size-limit": "^8.0.0",
     "tslib": "^2.4.0",
-    "tsup": "^6.2.3",
     "typescript": "^4.8.3",
+    "vite": "^3.1.6",
     "vitest": "^0.23.2"
   }
 }

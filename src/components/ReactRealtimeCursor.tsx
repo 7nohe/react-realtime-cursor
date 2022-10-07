@@ -12,7 +12,6 @@ import {
   MouseEvents,
   BackendType,
   FirebaseApp,
-  AmplifyApp,
   CursorHandler,
 } from "../types";
 import { MyCursor } from "./MyCursor";
@@ -22,7 +21,8 @@ import { getCursorPositionRatio } from "../libs/utils";
 import { CognitoUserAmplify } from "@aws-amplify/ui/dist/types/types/authenticator";
 
 type Props = MouseEvents<HTMLDivElement> & {
-  app: FirebaseApp | AmplifyApp;
+  firebaseApp?: FirebaseApp;
+  amplifyRoomId?: string;
   autoSignIn?: boolean;
   userName?: string;
   cognitoUser?: CognitoUserAmplify;
@@ -45,7 +45,8 @@ type Props = MouseEvents<HTMLDivElement> & {
 };
 
 export const ReactRealtimeCursor = ({
-  app,
+  firebaseApp,
+  amplifyRoomId = "MyRoom",
   autoSignIn = true,
   userName = "",
   cognitoUser,
@@ -80,20 +81,23 @@ export const ReactRealtimeCursor = ({
 
   useEffect(() => {
     (async () => {
-      if (backendType === "firebase" && "database" in app) {
+      if (backendType === "firebase" && firebaseApp) {
         const { createFirebaseHandler } = await import(
           "../libs/firebase/handler"
         );
-        handlerRef.current = createFirebaseHandler(app, autoSignIn);
+        handlerRef.current = createFirebaseHandler(firebaseApp, autoSignIn);
       }
-      if (backendType === "amplify" && cognitoUser) {
+      if (backendType === "amplify" && cognitoUser && amplifyRoomId) {
         const { createAmplifyHandler } = await import(
           "../libs/amplify/handler"
         );
-        handlerRef.current = createAmplifyHandler({ ...app, cognitoUser });
+        handlerRef.current = createAmplifyHandler({
+          roomId: amplifyRoomId,
+          cognitoUser,
+        });
       }
     })();
-  }, [app, autoSignIn]);
+  }, [firebaseApp, autoSignIn, cognitoUser, amplifyRoomId]);
 
   useEffect(() => {
     let disconnect: (() => void) | undefined;
