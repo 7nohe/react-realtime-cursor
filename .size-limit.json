@@ -1,0 +1,10 @@
+[
+  {
+    "path": "dist/react-realtime-cursor.js",
+    "limit": "10 KB"
+  },
+  {
+    "path": "dist/react-realtime-cursor.mjs",
+    "limit": "10 KB"
+  }
+]

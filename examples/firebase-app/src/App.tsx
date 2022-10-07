@@ -1,8 +1,5 @@
 import "./App.css";
-import {
-  ReactRealtimeCursor,
-  initializeFirebaseApp,
-} from "@7nohe/react-realtime-cursor";
+import { ReactRealtimeCursor, initializeFirebaseApp } from "../../../src";
 import { firebaseApp } from "../firebase";
 import { getAuth, signInAnonymously, User } from "firebase/auth";
 import { getDatabase } from "firebase/database";
@@ -39,7 +36,7 @@ function App() {
   return (
     <div className="App">
       <ReactRealtimeCursor
-        app={app}
+        firebaseApp={app}
         autoSignIn={false}
         userName={userName}
         style={{
