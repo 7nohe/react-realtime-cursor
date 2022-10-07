@@ -1,10 +1,10 @@
 [
   {
-    "path": "dist/react-realtime-cursor.umd.js",
-    "limit": "200 KB"
+    "path": "dist/react-realtime-cursor.js",
+    "limit": "10 KB"
   },
   {
     "path": "dist/react-realtime-cursor.mjs",
-    "limit": "200 KB"
+    "limit": "10 KB"
   }
 ]
