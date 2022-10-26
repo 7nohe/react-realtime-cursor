@@ -1,5 +1,8 @@
 import "./App.css";
-import { ReactRealtimeCursor, initializeFirebaseApp } from "../../../src";
+import {
+  ReactRealtimeCursor,
+  initializeFirebaseApp,
+} from "../../../src/firebase";
 import { firebaseApp } from "../firebase";
 import { getAuth, signInAnonymously, User } from "firebase/auth";
 import { getDatabase } from "firebase/database";
@@ -45,7 +48,6 @@ function App() {
           maxHeight: 640,
           padding: 20,
         }}
-        backendType="firebase"
       >
         <button onClick={() => console.log("Clicked")}>Click me</button>
       </ReactRealtimeCursor>

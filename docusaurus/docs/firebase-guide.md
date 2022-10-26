@@ -39,7 +39,7 @@ import "./App.css";
 import {
   ReactRealtimeCursor,
   initializeFirebaseApp,
-} from "@7nohe/react-realtime-cursor";
+} from "@7nohe/react-realtime-cursor/firebase";
 import { firebaseApp } from "../firebase";
 
 const auth = getAuth(firebaseApp);
@@ -64,7 +64,7 @@ import './App.css';
 import {
   ReactRealtimeCursor,
   initializeFirebaseApp,
-} from '@7nohe/react-realtime-cursor';
+} from '@7nohe/react-realtime-cursor/firebase';
 import { firebaseApp } from '../firebase';
 import { getAuth, signInAnonymously, User } from 'firebase/auth';
 import { getDatabase } from 'firebase/database';

@@ -1,5 +1,5 @@
 import "./App.css";
-import { ReactRealtimeCursor } from "../../../src";
+import { ReactRealtimeCursor } from "../../../src/amplify";
 import { Amplify } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import { withAuthenticator } from "@aws-amplify/ui-react";
@@ -22,7 +22,6 @@ function App({ signOut, user }: Props) {
           maxHeight: 640,
           padding: 20,
         }}
-        backendType="amplify"
       >
         <button onClick={() => console.log("Clicked")}>Click me</button>
       </ReactRealtimeCursor>

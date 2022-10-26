@@ -1,7 +1,7 @@
 import { Auth } from "firebase/auth";
 import { Database, DatabaseReference } from "firebase/database";
 import { DOMAttributes } from "react";
-import { CognitoUserAmplify } from "@aws-amplify/ui/dist/types/types/authenticator";
+import { CognitoUser } from "amazon-cognito-identity-js";
 
 export type FirebaseApp = {
   database: Database;
@@ -84,3 +84,14 @@ export type MouseEvents<T> = Pick<
 >;
 
 export type BackendType = "firebase" | "amplify";
+
+interface CognitoAttributes {
+  email: string;
+  phone_number: string;
+  [key: string]: string;
+}
+/** Cognito User Interface */
+export interface CognitoUserAmplify extends CognitoUser {
+  username?: string;
+  attributes?: CognitoAttributes;
+}

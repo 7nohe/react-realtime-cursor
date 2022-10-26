@@ -3,15 +3,19 @@
   "description": "A react component that integrates Figma-like cursor chat into your application",
   "version": "0.4.2",
   "license": "MIT",
-  "main": "dist/react-realtime-cursor.js",
-  "module": "dist/react-realtime-cursor.mjs",
+  "main": "dist/firebase.js",
+  "module": "dist/firebase.mjs",
   "exports": {
-    ".": {
-      "import": "./dist/react-realtime-cursor.mjs",
-      "require": "./dist/react-realtime-cursor.js"
+    "./firebase": {
+      "import": "./dist/firebase.mjs",
+      "require": "./dist/firebase.js"
+    },
+    "./amplify": {
+      "import": "./dist/amplify.mjs",
+      "require": "./dist/amplify.js"
     }
   },
-  "typings": "dist/index.d.ts",
+  "typings": "dist/types.d.ts",
   "files": [
     "dist"
   ],
@@ -22,10 +26,12 @@
     "node": ">=16"
   },
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "test": "vitest run",
-    "test:watch": "vitest",
+    "dev": "BACKEND=firebase vite dev",
+    "build:firebase": "BACKEND=firebase vite build",
+    "build:amplify": "BACKEND=amplify vite build",
+    "build": "npm run build:firebase && npm run build:amplify",
+    "test": "BACKEND=firebase vitest run",
+    "test:watch": "BACKEND=firebase vitest",
     "lint": "eslint --ext .ts,.tsx",
     "prepare": "husky install",
     "release": "np",
@@ -44,13 +50,13 @@
   "homepage": "https://github.com/7nohe/react-realtime-cursor",
   "bugs": "https://github.com/7nohe/react-realtime-cursor/issues",
   "devDependencies": {
-    "@aws-amplify/ui": "^3.13.3",
+    "@aws-amplify/ui-react": "^3.5.9",
     "@size-limit/preset-small-lib": "^8.0.0",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@typescript-eslint/eslint-plugin": "^5.37.0",
     "autoprefixer": "^10.4.8",
-    "aws-amplify": "^4.3.37",
+    "aws-amplify": "^4.3.41",
     "cssnano": "^5.1.13",
     "esbuild": "^0.15.7",
     "eslint": "^8.23.1",
@@ -59,7 +65,7 @@
     "eslint-plugin-react": "^7.31.8",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-testing-library": "^5.6.4",
-    "firebase": "^9.11.0",
+    "firebase": "^9.12.1",
     "husky": "^8.0.1",
     "np": "^7.6.2",
     "postcss": "^8.4.16",
