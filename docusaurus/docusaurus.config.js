@@ -50,12 +50,18 @@ const config = {
         items: [
           {
             type: "doc",
-            docId: "guide",
             position: "left",
+            docId: "introduction",
             label: "Docs",
           },
           {
-            href: "https://github.com/facebook/docusaurus",
+            type: "doc",
+            position: "left",
+            docId: "api",
+            label: "API",
+          },
+          {
+            href: "https://github.com/7nohe/react-realtime-cursor",
             label: "GitHub",
             position: "right",
           },
@@ -68,8 +74,21 @@ const config = {
             title: "Docs",
             items: [
               {
-                label: "Guide",
-                to: "/docs/guide",
+                label: "Introduction",
+                to: "/docs/introduction",
+              },
+              {
+                label: "Guides",
+                to: "/docs/category/guides",
+              },
+            ],
+          },
+          {
+            title: "API",
+            items: [
+              {
+                label: "API",
+                to: "/docs/api",
               },
             ],
           },
