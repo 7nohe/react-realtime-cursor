@@ -1,6 +1,6 @@
 {
   "name": "@7nohe/react-realtime-cursor",
-  "description": "A react component that allows you to integrate cursor chat like Figma into your web application",
+  "description": "A react component that integrates Figma-like cursor chat into your application",
   "version": "0.4.2",
   "license": "MIT",
   "main": "dist/react-realtime-cursor.js",
