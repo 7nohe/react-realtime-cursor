@@ -1,10 +1,18 @@
 [
   {
-    "path": "dist/react-realtime-cursor.js",
+    "path": "dist/firebase.js",
     "limit": "10 KB"
   },
   {
-    "path": "dist/react-realtime-cursor.mjs",
+    "path": "dist/firebase.mjs",
+    "limit": "10 KB"
+  },
+  {
+    "path": "dist/amplify.js",
+    "limit": "10 KB"
+  },
+  {
+    "path": "dist/amplify.mjs",
     "limit": "10 KB"
   }
 ]
