@@ -1,7 +1,7 @@
 {
   "name": "@7nohe/react-realtime-cursor",
   "description": "A react component that integrates Figma-like cursor chat into your application",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "license": "MIT",
   "main": "./dist/firebase.cjs",
   "module": "./dist/firebase.js",
