@@ -72,7 +72,7 @@ Import and load the configuration file.
 
 ```tsx
 import "./App.css";
-import { ReactRealtimeCursor } from "@7nohe/react-realtime-cursor";
+import { ReactRealtimeCursor } from "@7nohe/react-realtime-cursor/amplify";
 import { Amplify } from "aws-amplify";
 import awsconfig from "./aws-exports";
 import { withAuthenticator } from "@aws-amplify/ui-react";
@@ -95,7 +95,6 @@ function App({ signOut, user }: Props) {
           maxHeight: 640,
           padding: 20,
         }}
-        backendType="amplify"
       >
         <button onClick={() => console.log("Clicked")}>Click me</button>
       </ReactRealtimeCursor>
@@ -109,3 +108,22 @@ export default withAuthenticator(App);
 In the Amplify backend, `cognitoUser` is required.
 
 You can easily provide the entire authentication flow by using `@aws-amplify/ui-react`.
+
+Also, you need to update vite.config.ts like this
+
+```ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "./runtimeConfig": "./runtimeConfig.browser", // <- add this
+    },
+  },
+  define: {
+    global: {},
+  },
+});
+```
