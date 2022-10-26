@@ -5,6 +5,7 @@
   "license": "MIT",
   "main": "dist/firebase.js",
   "module": "dist/firebase.mjs",
+  "type": "module",
   "exports": {
     "./firebase": {
       "import": "./dist/firebase.mjs",
