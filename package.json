@@ -8,12 +8,12 @@
   "type": "module",
   "exports": {
     "./firebase": {
-      "import": "./dist/firebase.mjs",
+      "import": "./dist/firebase.js",
       "require": "./dist/firebase.cjs",
       "type": "./dist/firebase.d.ts"
     },
     "./amplify": {
-      "import": "./dist/amplify.mjs",
+      "import": "./dist/amplify.js",
       "require": "./dist/amplify.cjs",
       "type": "./dist/amplify.d.ts"
     }
