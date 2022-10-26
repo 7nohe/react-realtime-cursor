@@ -9,7 +9,7 @@ const config = {
   title: "React Realtime Cursor",
   tagline:
     "A react component that integrates Figma-like cursor chat into your application",
-  url: "https://github.com/7nohe/react-realtime-cursor",
+  url: "https://react-realtime-cursor.netlify.app",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
