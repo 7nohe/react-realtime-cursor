@@ -3,8 +3,8 @@
   "description": "A react component that integrates Figma-like cursor chat into your application",
   "version": "0.4.7",
   "license": "MIT",
-  "main": "dist/firebase.cjs",
-  "module": "dist/firebase.js",
+  "main": "./dist/firebase.cjs",
+  "module": "./dist/firebase.js",
   "type": "module",
   "exports": {
     "./firebase": {
