@@ -9,16 +9,23 @@
   "exports": {
     "./firebase": {
       "import": "./dist/firebase.js",
-      "require": "./dist/firebase.cjs",
-      "type": "./dist/firebase.d.ts"
+      "require": "./dist/firebase.cjs"
     },
     "./amplify": {
       "import": "./dist/amplify.js",
-      "require": "./dist/amplify.cjs",
-      "type": "./dist/amplify.d.ts"
+      "require": "./dist/amplify.cjs"
     }
   },
-  "typings": "dist/types.d.ts",
+  "typesVersions": {
+    "*": {
+      "firebase": [
+        "./dist/firebase.d.ts"
+      ],
+      "amplify": [
+        "./dist/amplify.d.ts"
+      ]
+    }
+  },
   "files": [
     "dist"
   ],
