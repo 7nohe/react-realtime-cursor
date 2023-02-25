@@ -26,6 +26,6 @@ jobs:
         run: npm run lint
 
       - name: Test
-        run: vitest run
+        run: npx vitest run
         env:
           BACKEND: firebase
