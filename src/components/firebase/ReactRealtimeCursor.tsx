@@ -1,89 +1,48 @@
-import React, {
-  CSSProperties,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useCursors } from "../../hooks/useCursors";
-import { useMouseMove } from "../../hooks/useMouseMove";
-import {
-  CursorChangeEvent,
-  MouseEvents,
-  FirebaseApp,
-  CursorHandler,
-} from "../../types";
-import { MyCursor } from "../MyCursor";
-import { OtherCursor, OtherCursorProps } from "../OtherCursor";
+import { MouseEvents, FirebaseApp, CursorHandler } from "../../types";
 import "../../styles/react-realtime-cursor.css";
-import { getCursorPositionRatio } from "../../libs/utils";
+import { Cursors, CursorsProps } from "../Cursors";
 
 type Props = MouseEvents<HTMLDivElement> & {
   firebaseApp: FirebaseApp;
   autoSignIn?: boolean;
-  userName?: string;
   cursors?: {
     me?: {
       visible?: boolean;
     };
   };
-  onMouseMove?: React.MouseEventHandler<HTMLDivElement>;
-  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
-  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
-  style?: CSSProperties;
-  useAbsolutePosition?: boolean;
-  offsetX?: number;
-  offsetY?: number;
-  beforeSaveCurrentPosition?: (event: CursorChangeEvent) => CursorChangeEvent;
-  beforeRenderOtherCursor?: OtherCursorProps["beforeRenderOtherCursor"];
-  children?: React.ReactNode;
-};
+} & Omit<
+    CursorsProps,
+    | "currentUserId"
+    | "cursorHandler"
+    | "scrollPosition"
+    | "cursorsOption"
+    | "cursors"
+  >;
 
-export const ReactRealtimeCursor = ({
+export function ReactRealtimeCursor({
   firebaseApp,
   autoSignIn = true,
-  userName = "",
   cursors: cursorsOption = { me: { visible: true } },
-  onMouseMove,
-  onMouseLeave,
-  onMouseEnter,
-  useAbsolutePosition = false,
-  offsetX,
-  offsetY,
-  beforeSaveCurrentPosition,
-  beforeRenderOtherCursor,
-  children,
   ...props
-}: Props) => {
-  const handlerRef = useRef<CursorHandler>();
+}: Props) {
   const { cursors, handleCursor } = useCursors();
+  const [handler, setHandler] = useState<CursorHandler>();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-  const [myComment, setMyComment] = useState<string>("");
-  const { pos, visible, setVisible, setPositionOnMouseMove } = useMouseMove(
-    currentUserId,
-    (e) => {
-      if (beforeSaveCurrentPosition) {
-        e = beforeSaveCurrentPosition(e);
-      }
-      handlerRef.current?.onCursorPositionChanged(e);
-    },
-    userName,
-    myComment
-  );
-
   useEffect(() => {
     (async () => {
       const { createFirebaseHandler } = await import(
         "../../libs/firebase/handler"
       );
-      handlerRef.current = createFirebaseHandler(firebaseApp, autoSignIn);
+      setHandler(createFirebaseHandler(firebaseApp, autoSignIn));
     })();
   }, [firebaseApp, autoSignIn]);
 
   useEffect(() => {
     let disconnect: (() => void) | undefined;
     const init = async () => {
-      const res = await handlerRef.current?.initialize(
+      const res = await handler?.initialize(
         currentUserId,
         (userId) => {
           setCurrentUserId(userId);
@@ -97,11 +56,9 @@ export const ReactRealtimeCursor = ({
 
     return () => {
       disconnect?.();
-      handlerRef.current?.disconnect?.();
+      handler?.disconnect?.();
     };
-  }, [currentUserId, handlerRef.current, handleCursor]);
-
-  const divRef = useRef<HTMLDivElement>(null);
+  }, [currentUserId, handler, handleCursor]);
 
   const [scrollPosition, setPosition] = useState({ x: 0, y: 0 });
   useLayoutEffect(() => {
@@ -114,54 +71,13 @@ export const ReactRealtimeCursor = ({
   }, []);
 
   return (
-    <div
-      ref={divRef}
-      className="react-realtime-cursor"
+    <Cursors
       {...props}
-      onMouseMove={(e) => {
-        setPositionOnMouseMove(e);
-        onMouseMove?.(e);
-      }}
-      onMouseLeave={(e) => {
-        setVisible(false);
-        onMouseLeave?.(e);
-      }}
-      onMouseEnter={(e) => {
-        setVisible(true);
-        onMouseEnter?.(e);
-      }}
-    >
-      {Object.values(cursors).map((cursor) => (
-        <OtherCursor
-          key={cursor.id}
-          {...cursor}
-          useAbsolutePosition={useAbsolutePosition}
-          offsetX={scrollPosition.x}
-          offsetY={scrollPosition.y}
-          beforeRenderOtherCursor={beforeRenderOtherCursor}
-        />
-      ))}
-      {cursorsOption?.me?.visible && currentUserId && (
-        <MyCursor
-          id={currentUserId}
-          x={pos.x}
-          y={pos.y}
-          offsetX={scrollPosition.x}
-          offsetY={scrollPosition.y}
-          visible={visible}
-          userName={userName}
-          onCommentUpdated={(data) => {
-            const { ratioX, ratioY } = getCursorPositionRatio(data.x, data.y);
-            handlerRef.current?.onCursorPositionChanged({
-              ...data,
-              ratioX,
-              ratioY,
-            });
-            setMyComment(data.comment ?? "");
-          }}
-        />
-      )}
-      {children}
-    </div>
+      cursors={cursors}
+      cursorsOption={cursorsOption}
+      currentUserId={currentUserId}
+      scrollPosition={scrollPosition}
+      cursorHandler={handler}
+    />
   );
-};
+}

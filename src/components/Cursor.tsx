@@ -10,7 +10,7 @@ export type CursorProps = Omit<CursorData, "ratioX" | "ratioY"> & {
   color?: string;
 };
 
-export const Cursor = (
+export function Cursor(
   { id, x, y, offsetX, offsetY, children, color }: CursorProps = {
     id: "0",
     x: 0,
@@ -18,7 +18,7 @@ export const Cursor = (
     offsetX: 0,
     offsetY: 0,
   }
-) => {
+) {
   const defaultColor = useMemo(() => getStyle(id).color.default, [id]);
   return (
     <div
@@ -93,4 +93,4 @@ export const Cursor = (
       {children}
     </div>
   );
-};
+}

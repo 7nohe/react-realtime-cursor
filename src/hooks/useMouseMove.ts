@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { getCursorPositionRatio } from "../libs/utils";
+import { getCursorPositionRatio , throttle } from "../libs/utils";
 import { CursorChangeEvent } from "../types";
-import { throttle } from "../libs/utils";
 
 export const useMouseMove = (
   currentUserId: string | null,

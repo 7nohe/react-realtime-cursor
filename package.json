@@ -42,7 +42,7 @@
     "build": "npm run build:firebase && npm run build:amplify",
     "test": "BACKEND=firebase vitest run",
     "test:watch": "BACKEND=firebase vitest",
-    "lint": "eslint --ext .ts,.tsx",
+    "lint": "eslint --ext .ts,.tsx ./src",
     "prepare": "husky install",
     "release": "np",
     "size": "size-limit"

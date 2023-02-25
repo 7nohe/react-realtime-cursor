@@ -17,11 +17,11 @@ const defaultInputWidth = 144;
 const defaultInputHeight = 48;
 const maxInputWidth = 250;
 
-export const MyCursor = ({
+export function MyCursor({
   visible = true,
   onCommentUpdated,
   ...props
-}: Props) => {
+}: Props) {
   const [showInput, setShowInput] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [inputWidth, setInputWidth] = useState(defaultInputWidth);
@@ -169,4 +169,4 @@ export const MyCursor = ({
       )}
     </Cursor>
   );
-};
+}
