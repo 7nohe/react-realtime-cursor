@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
-import { getCursorPosition } from "../libs/utils";
+import { getCursorPosition, getStyle } from "../libs/utils";
 import { CursorData } from "../types";
-import { getStyle } from "../libs/utils";
 import { Cursor } from "./Cursor";
 
 type PositionData = Omit<CursorData, "id" | "comment" | "userName">;
@@ -11,7 +10,7 @@ export type OtherCursorProps = CursorData & {
   beforeRenderOtherCursor?: (data: PositionData) => PositionData;
 };
 
-export const OtherCursor = (
+export function OtherCursor(
   {
     id,
     ratioX,
@@ -34,7 +33,7 @@ export const OtherCursor = (
     x: 0,
     y: 0,
   }
-) => {
+) {
   ({ x, y } = useMemo(() => {
     if (useAbsolutePosition) {
       return {
@@ -105,4 +104,4 @@ export const OtherCursor = (
       )}
     </Cursor>
   );
-};
+}
