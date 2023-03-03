@@ -14,6 +14,10 @@
     "./amplify": {
       "import": "./dist/amplify.js",
       "require": "./dist/amplify.cjs"
+    },
+    "./supabase": {
+      "import": "./dist/supabase.js",
+      "require": "./dist/supabase.cjs"
     }
   },
   "typesVersions": {
@@ -23,6 +27,9 @@
       ],
       "amplify": [
         "./dist/amplify.d.ts"
+      ],
+      "supabase": [
+        "./dist/supabase.d.ts"
       ]
     }
   },
@@ -39,7 +46,8 @@
     "dev": "BACKEND=firebase vite dev",
     "build:firebase": "BACKEND=firebase vite build",
     "build:amplify": "BACKEND=amplify vite build",
-    "build": "npm run build:firebase && npm run build:amplify",
+    "build:supabase": "BACKEND=supabase vite build",
+    "build": "npm run build:firebase && npm run build:amplify && npm run build:supabase",
     "test": "BACKEND=firebase vitest run",
     "test:watch": "BACKEND=firebase vitest",
     "lint": "eslint --ext .ts,.tsx ./src",
@@ -50,6 +58,7 @@
   "peerDependencies": {
     "aws-amplify": ">=4.3.37",
     "firebase": ">=9.11.0",
+    "@supabase/supabase-js": ">=2.8.0",
     "react": ">=18"
   },
   "author": "DAIKI URATA(@7nohe)",
