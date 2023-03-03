@@ -56,9 +56,9 @@
     "size": "size-limit"
   },
   "peerDependencies": {
-    "aws-amplify": ">=4.3.37",
-    "firebase": ">=9.11.0",
-    "@supabase/supabase-js": ">=2.8.0",
+    "@supabase/supabase-js": ">=2.10.0",
+    "aws-amplify": ">=5.0.16",
+    "firebase": ">=9.17.2",
     "react": ">=18"
   },
   "author": "DAIKI URATA(@7nohe)",
@@ -69,23 +69,23 @@
   "homepage": "https://github.com/7nohe/react-realtime-cursor",
   "bugs": "https://github.com/7nohe/react-realtime-cursor/issues",
   "devDependencies": {
-    "@aws-amplify/ui-react": "^4.3.8",
+    "@aws-amplify/ui-react": "^4.3.9",
     "@size-limit/preset-small-lib": "^8.0.0",
-    "@supabase/supabase-js": "^2.8.0",
+    "@supabase/supabase-js": "^2.10.0",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
-    "@typescript-eslint/eslint-plugin": "^5.53.0",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
     "autoprefixer": "^10.4.13",
     "aws-amplify": "^5.0.16",
     "cssnano": "^5.1.15",
     "esbuild": "^0.17.10",
-    "eslint": "^8.34.0",
+    "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-testing-library": "^5.10.2",
-    "firebase": "^9.17.1",
+    "firebase": "^9.17.2",
     "husky": "^8.0.3",
     "np": "^7.6.3",
     "postcss": "^8.4.21",
@@ -96,6 +96,6 @@
     "typescript": "^4.9.5",
     "vite": "^4.1.4",
     "vite-plugin-dts": "^2.0.2",
-    "vitest": "^0.29.1"
+    "vitest": "^0.29.2"
   }
 }
