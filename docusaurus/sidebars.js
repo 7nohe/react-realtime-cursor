@@ -30,7 +30,7 @@ const sidebars = {
         slug: "/category/guides",
         keywords: ["guides"],
       },
-      items: ["firebase-guide", "amplify-guide"],
+      items: ["firebase-guide", "amplify-guide", "supabase-guide"],
     },
   ],
 };
