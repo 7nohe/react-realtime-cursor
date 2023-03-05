@@ -1,4 +1,5 @@
 import "./App.css";
+import "../../../src/styles/react-realtime-cursor.css";
 import { ReactRealtimeCursor } from "../../../src/supabase";
 import { useEffect, useState } from "react";
 import { createClient, User } from "@supabase/supabase-js";

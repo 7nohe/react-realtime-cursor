@@ -36,6 +36,7 @@ After that, create a firebase instance, and pass it to a `ReactRealtimeCursor` c
 
 ```jsx
 import "./App.css";
+import "@7nohe/react-realtime-cursor/dist/style.css"; // import styles
 import {
   ReactRealtimeCursor,
   initializeFirebaseApp,
@@ -61,6 +62,7 @@ Optionally, you can add custom sigin logic to your application.
 
 ```jsx
 import './App.css';
+import "@7nohe/react-realtime-cursor/dist/style.css"; // import styles
 import {
   ReactRealtimeCursor,
   initializeFirebaseApp,

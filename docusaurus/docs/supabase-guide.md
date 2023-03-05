@@ -21,6 +21,7 @@ Therefore, you must first create a Supabase project at [supabase.com](https://su
 
 ```jsx
 import "./App.css";
+import "@7nohe/react-realtime-cursor/dist/style.css"; // import styles
 import { ReactRealtimeCursor } from "@7nohe/react-realtime-cursor/supabase";
 import { useEffect, useState } from "react";
 import { createClient, User } from "@supabase/supabase-js";
