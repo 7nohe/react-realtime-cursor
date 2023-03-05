@@ -10,12 +10,12 @@ import {
   ref,
   set,
 } from "firebase/database";
-import { CursorHandler, FirebaseApp } from "../../types";
+import { FirebaseCursorHandler, FirebaseApp } from "../../types";
 
 export const createFirebaseHandler: (
   app: FirebaseApp,
   autoSignIn: boolean
-) => CursorHandler = (
+) => FirebaseCursorHandler = (
   { auth, roomRef, roomIdRef, roomId, database },
   autoSignIn
 ) => {

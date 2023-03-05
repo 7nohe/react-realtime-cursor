@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useCursors } from "../../hooks/useCursors";
-import { MouseEvents, CursorHandler, CognitoUserAmplify } from "../../types";
+import {
+  MouseEvents,
+  CognitoUserAmplify,
+  AmplifyCursorHandler,
+} from "../../types";
 import { Cursors, CursorsProps } from "../Cursors";
 import { useScrollPosition } from "../../hooks/useScrollPosition";
 
@@ -28,8 +32,7 @@ export function ReactRealtimeCursor({
   ...props
 }: Props) {
   const { cursors, handleCursor } = useCursors();
-  const [handler, setHandler] = useState<CursorHandler>();
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [handler, setHandler] = useState<AmplifyCursorHandler>();
 
   useEffect(() => {
     (async () => {
@@ -50,13 +53,7 @@ export function ReactRealtimeCursor({
   useEffect(() => {
     let disconnect: (() => void) | undefined;
     const init = async () => {
-      const res = await handler?.initialize(
-        currentUserId,
-        (userId) => {
-          setCurrentUserId(userId);
-        },
-        handleCursor
-      );
+      const res = await handler?.initialize(handleCursor);
       disconnect = res?.disconnect;
     };
 
@@ -64,9 +61,8 @@ export function ReactRealtimeCursor({
 
     return () => {
       disconnect?.();
-      handler?.disconnect?.();
     };
-  }, [currentUserId, handler, handleCursor]);
+  }, [handler, handleCursor]);
 
   const { scrollPosition } = useScrollPosition();
 
@@ -74,7 +70,7 @@ export function ReactRealtimeCursor({
     <Cursors
       {...props}
       cursors={cursors}
-      currentUserId={currentUserId}
+      currentUserId={cognitoUser?.username}
       scrollPosition={scrollPosition}
       cursorHandler={handler}
     />

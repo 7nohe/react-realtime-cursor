@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { getCursorPositionRatio , throttle } from "../libs/utils";
+import { getCursorPositionRatio, throttle } from "../libs/utils";
 import { CursorChangeEvent } from "../types";
 
 export const useMouseMove = (
-  currentUserId: string | null,
+  currentUserId: string | null | undefined,
   onCursorPositionChanged: (data: CursorChangeEvent) => void,
   userName?: string,
   comment?: string
