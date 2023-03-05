@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useCursors } from "../../hooks/useCursors";
-import { MouseEvents, FirebaseApp, CursorHandler } from "../../types";
+import { MouseEvents, FirebaseApp, FirebaseCursorHandler } from "../../types";
 import { Cursors, CursorsProps } from "../Cursors";
 import { useScrollPosition } from "../../hooks/useScrollPosition";
 
@@ -28,7 +28,7 @@ export function ReactRealtimeCursor({
   ...props
 }: Props) {
   const { cursors, handleCursor } = useCursors();
-  const [handler, setHandler] = useState<CursorHandler>();
+  const [handler, setHandler] = useState<FirebaseCursorHandler>();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   useEffect(() => {
     (async () => {

@@ -2,9 +2,10 @@ import React, { CSSProperties, useState } from "react";
 import { useMouseMove } from "../hooks/useMouseMove";
 import { getCursorPositionRatio } from "../libs/utils";
 import {
+  AmplifyCursorHandler,
   CursorChangeEvent,
   CursorData,
-  CursorHandler,
+  FirebaseCursorHandler,
   MouseEvents,
   SupabaseCursorHandler,
 } from "../types";
@@ -29,8 +30,11 @@ export type CursorsProps = MouseEvents<HTMLDivElement> & {
   beforeSaveCurrentPosition?: (event: CursorChangeEvent) => CursorChangeEvent;
   beforeRenderOtherCursor?: OtherCursorProps["beforeRenderOtherCursor"];
   children?: React.ReactNode;
-  cursorHandler?: CursorHandler | SupabaseCursorHandler;
-  currentUserId: string | null;
+  cursorHandler?:
+    | FirebaseCursorHandler
+    | SupabaseCursorHandler
+    | AmplifyCursorHandler;
+  currentUserId: string | null | undefined;
   scrollPosition: {
     x: number;
     y: number;

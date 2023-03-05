@@ -47,7 +47,14 @@ export type SupabaseCursorHandler = {
   onCursorPositionChanged: (event: CursorChangeEvent) => void;
 };
 
-export type CursorHandler = {
+export type AmplifyCursorHandler = {
+  initialize: (
+    handleCursor: (eventName: string, key: string | null, value: any) => void
+  ) => Promise<{ disconnect: () => void } | undefined>;
+  onCursorPositionChanged: (event: CursorChangeEvent) => void;
+};
+
+export type FirebaseCursorHandler = {
   initialize: (
     currentUserId: string | null,
     onUserIdChanged: (userId: string | null) => void,

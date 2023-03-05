@@ -1,5 +1,5 @@
 import { getCursorData } from "./graphql/queries";
-import { CursorHandler, AmplifyApp } from "../../types";
+import { AmplifyApp, AmplifyCursorHandler } from "../../types";
 import { API, Hub } from "aws-amplify";
 import { CONNECTION_STATE_CHANGE, ConnectionState } from "@aws-amplify/pubsub";
 
@@ -24,14 +24,12 @@ import {
   updateCursorData,
 } from "./graphql/mutations";
 
-export const createAmplifyHandler: (app: AmplifyApp) => CursorHandler = (
+export const createAmplifyHandler: (app: AmplifyApp) => AmplifyCursorHandler = (
   options
 ) => {
   const { cognitoUser } = options;
   return {
     initialize: async (
-      currentUserId: string | null,
-      onUserIdChanged: (userId: string | null) => void,
       handleCursor: (eventName: string, key: string | null, value: any) => void
     ) => {
       const init = async () => {
@@ -39,7 +37,6 @@ export const createAmplifyHandler: (app: AmplifyApp) => CursorHandler = (
           if (!cognitoUser.username) {
             throw Error("cognito user not found");
           }
-          onUserIdChanged(cognitoUser.username);
           await API.graphql<GraphQLQuery<CreateCursorDataMutation>>({
             query: createCursorData,
             variables: {
@@ -61,19 +58,18 @@ export const createAmplifyHandler: (app: AmplifyApp) => CursorHandler = (
       };
 
       await init();
-      // TODO: onAuthStateChanged
 
-      if (!currentUserId) return;
+      if (!cognitoUser.username) return;
 
       const result = await API.graphql<GraphQLQuery<GetCursorDataQuery>>({
         query: getCursorData,
-        variables: { id: currentUserId },
+        variables: { id: cognitoUser.username },
       });
       const data = result.data?.getCursorData;
       if (!data) return;
       const id = data?.id;
       Object.values(data).forEach((value: any) => {
-        if (id === currentUserId) {
+        if (id === cognitoUser.username) {
           return;
         }
         handleCursor("add", id, value);
@@ -85,12 +81,12 @@ export const createAmplifyHandler: (app: AmplifyApp) => CursorHandler = (
         query: onCreateCursorData,
         authMode: "AMAZON_COGNITO_USER_POOLS",
         variables: {
-          owner: currentUserId,
+          owner: cognitoUser.username,
         },
       }).subscribe({
         next: ({ value }) => {
           const cursorData = value.data?.onCreateCursorData;
-          if (cursorData?.id === currentUserId) {
+          if (cursorData?.id === cognitoUser.username) {
             return;
           }
           handleCursor("add", cursorData?.id ?? null, cursorData);
@@ -104,12 +100,12 @@ export const createAmplifyHandler: (app: AmplifyApp) => CursorHandler = (
         query: onUpdateCursorData,
         authMode: "AMAZON_COGNITO_USER_POOLS",
         variables: {
-          owner: currentUserId,
+          owner: cognitoUser.username,
         },
       }).subscribe({
         next: ({ value }) => {
           const cursorData = value.data?.onUpdateCursorData;
-          if (cursorData?.id === currentUserId) {
+          if (cursorData?.id === cognitoUser.username) {
             return;
           }
           handleCursor("change", cursorData?.id ?? null, cursorData);
@@ -123,12 +119,12 @@ export const createAmplifyHandler: (app: AmplifyApp) => CursorHandler = (
         query: onDeleteCursorData,
         authMode: "AMAZON_COGNITO_USER_POOLS",
         variables: {
-          owner: currentUserId,
+          owner: cognitoUser.username,
         },
       }).subscribe({
         next: ({ value }) => {
           const cursorData = value.data?.onDeleteCursorData;
-          if (cursorData?.id === currentUserId) {
+          if (cursorData?.id === cognitoUser.username) {
             return;
           }
           handleCursor("remove", cursorData?.id ?? null, cursorData);
