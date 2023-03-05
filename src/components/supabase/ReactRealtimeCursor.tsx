@@ -1,8 +1,9 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCursors } from "../../hooks/useCursors";
 import { MouseEvents, SupabaseApp, SupabaseCursorHandler } from "../../types";
 import "../../styles/react-realtime-cursor.css";
 import { Cursors, CursorsProps } from "../Cursors";
+import { useScrollPosition } from "../../hooks/useScrollPosition";
 
 type Props = MouseEvents<HTMLDivElement> & {
   supabaseApp: SupabaseApp;
@@ -40,15 +41,7 @@ export function ReactRealtimeCursor({
     handler?.initialize(handleCursor);
   }, [handler, handleCursor]);
 
-  const [scrollPosition, setPosition] = useState({ x: 0, y: 0 });
-  useLayoutEffect(() => {
-    const updatePosition = () => {
-      setPosition({ y: window.scrollY, x: window.scrollX });
-    };
-    window.addEventListener("scroll", updatePosition);
-    updatePosition();
-    return () => window.removeEventListener("scroll", updatePosition);
-  }, []);
+  const { scrollPosition } = useScrollPosition();
 
   return (
     <Cursors
