@@ -18,6 +18,10 @@
     "./supabase": {
       "import": "./dist/supabase.js",
       "require": "./dist/supabase.cjs"
+    },
+    "./dist/style.css": {
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
     }
   },
   "typesVersions": {

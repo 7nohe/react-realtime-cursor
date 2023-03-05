@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useCursors } from "../../hooks/useCursors";
 import { MouseEvents, FirebaseApp, CursorHandler } from "../../types";
-import "../../styles/react-realtime-cursor.css";
 import { Cursors, CursorsProps } from "../Cursors";
 import { useScrollPosition } from "../../hooks/useScrollPosition";
 

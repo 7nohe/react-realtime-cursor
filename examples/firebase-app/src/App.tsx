@@ -1,4 +1,5 @@
 import "./App.css";
+import "../../../src/styles/react-realtime-cursor.css";
 import {
   ReactRealtimeCursor,
   initializeFirebaseApp,

@@ -72,6 +72,7 @@ Import and load the configuration file.
 
 ```tsx
 import "./App.css";
+import "@7nohe/react-realtime-cursor/dist/style.css"; // import styles
 import { ReactRealtimeCursor } from "@7nohe/react-realtime-cursor/amplify";
 import { Amplify } from "aws-amplify";
 import awsconfig from "./aws-exports";
