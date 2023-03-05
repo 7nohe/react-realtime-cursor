@@ -6,6 +6,7 @@ import {
   CursorData,
   CursorHandler,
   MouseEvents,
+  SupabaseCursorHandler,
 } from "../types";
 import { MyCursor } from "./MyCursor";
 import { OtherCursor, OtherCursorProps } from "./OtherCursor";
@@ -28,7 +29,7 @@ export type CursorsProps = MouseEvents<HTMLDivElement> & {
   beforeSaveCurrentPosition?: (event: CursorChangeEvent) => CursorChangeEvent;
   beforeRenderOtherCursor?: OtherCursorProps["beforeRenderOtherCursor"];
   children?: React.ReactNode;
-  cursorHandler?: CursorHandler;
+  cursorHandler?: CursorHandler | SupabaseCursorHandler;
   currentUserId: string | null;
   scrollPosition: {
     x: number;

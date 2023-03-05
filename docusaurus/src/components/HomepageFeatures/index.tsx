@@ -35,7 +35,7 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         React Realtime Cursor has the option to choose from several managed
-        backend services (currently supports Firebase and Amplify).
+        backend services (currently supports Firebase, Amplify and Supabase).
       </>
     ),
   },

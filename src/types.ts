@@ -2,6 +2,7 @@ import { Auth } from "firebase/auth";
 import { Database, DatabaseReference } from "firebase/database";
 import { DOMAttributes } from "react";
 import { CognitoUser } from "amazon-cognito-identity-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 export type FirebaseApp = {
   database: Database;
@@ -14,6 +15,12 @@ export type FirebaseApp = {
 export type AmplifyApp = {
   roomId: string;
   cognitoUser: CognitoUserAmplify;
+};
+
+export type SupabaseApp = {
+  roomId: string;
+  client: SupabaseClient;
+  userId: string;
 };
 
 export type CursorData = {
@@ -31,6 +38,13 @@ export type CursorData = {
 export type CursorChangeEvent = Omit<CursorData, "offsetX" | "offsetY"> & {
   ratioX: number;
   ratioY: number;
+};
+
+export type SupabaseCursorHandler = {
+  initialize: (
+    handleCursor: (eventName: string, key: string | null, value: any) => void
+  ) => void;
+  onCursorPositionChanged: (event: CursorChangeEvent) => void;
 };
 
 export type CursorHandler = {

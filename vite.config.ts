@@ -12,6 +12,10 @@ const config = {
     entry: resolve(__dirname, "./src/amplify.ts"),
     fileName: "amplify",
   },
+  supabase: {
+    entry: resolve(__dirname, "./src/supabase.ts"),
+    fileName: "supabase",
+  },
 };
 
 const currentConfig = config[process.env.BACKEND!];

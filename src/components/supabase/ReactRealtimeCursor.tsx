@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useCursors } from "../../hooks/useCursors";
-import { MouseEvents, FirebaseApp, CursorHandler } from "../../types";
+import { MouseEvents, SupabaseApp, SupabaseCursorHandler } from "../../types";
 import "../../styles/react-realtime-cursor.css";
 import { Cursors, CursorsProps } from "../Cursors";
 import { useScrollPosition } from "../../hooks/useScrollPosition";
 
 type Props = MouseEvents<HTMLDivElement> & {
-  firebaseApp: FirebaseApp;
-  autoSignIn?: boolean;
+  supabaseApp: SupabaseApp;
   cursors?: {
     me?: {
       visible?: boolean;
@@ -23,43 +22,24 @@ type Props = MouseEvents<HTMLDivElement> & {
   >;
 
 export function ReactRealtimeCursor({
-  firebaseApp,
-  autoSignIn = true,
+  supabaseApp,
   cursors: cursorsOption = { me: { visible: true } },
   ...props
 }: Props) {
   const { cursors, handleCursor } = useCursors();
-  const [handler, setHandler] = useState<CursorHandler>();
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [handler, setHandler] = useState<SupabaseCursorHandler>();
   useEffect(() => {
     (async () => {
-      const { createFirebaseHandler } = await import(
-        "../../libs/firebase/handler"
+      const { createSupabaseHandler } = await import(
+        "../../libs/supabase/handler"
       );
-      setHandler(createFirebaseHandler(firebaseApp, autoSignIn));
+      setHandler(createSupabaseHandler(supabaseApp));
     })();
-  }, [firebaseApp, autoSignIn]);
+  }, [supabaseApp]);
 
   useEffect(() => {
-    let disconnect: (() => void) | undefined;
-    const init = async () => {
-      const res = await handler?.initialize(
-        currentUserId,
-        (userId) => {
-          setCurrentUserId(userId);
-        },
-        handleCursor
-      );
-      disconnect = res?.disconnect;
-    };
-
-    init();
-
-    return () => {
-      disconnect?.();
-      handler?.disconnect?.();
-    };
-  }, [currentUserId, handler, handleCursor]);
+    handler?.initialize(handleCursor);
+  }, [handler, handleCursor]);
 
   const { scrollPosition } = useScrollPosition();
 
@@ -68,7 +48,7 @@ export function ReactRealtimeCursor({
       {...props}
       cursors={cursors}
       cursorsOption={cursorsOption}
-      currentUserId={currentUserId}
+      currentUserId={supabaseApp.userId}
       scrollPosition={scrollPosition}
       cursorHandler={handler}
     />
